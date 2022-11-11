@@ -1,0 +1,26 @@
+{
+    "professional": {
+        "name": "Professional",
+        "icon": "🤝",
+        "Phone": "123-456-7890",
+        "Email": "abc@illinois.edu",
+        "Instagram": "abc1234",
+        "LinkedIn": "https://www.linkedin.com/in/12345/"
+    },
+    "personal": {
+        "name": "Personal",
+        "icon": "🔒",
+        "Phone": "123-456-7890",
+        "Email": "abc@illinois.edu",
+        "Instagram": "abc1234",
+        "LinkedIn": "https://www.linkedin.com/in/12345/"
+    },
+    "academic": {
+        "name": "Academic",
+        "icon": "📚",
+        "Phone": "123-456-7890",
+        "Email": "abc@illinois.edu",
+        "Instagram": "abc1234",
+        "LinkedIn": "https://www.linkedin.com/in/12345/"
+    }
+}

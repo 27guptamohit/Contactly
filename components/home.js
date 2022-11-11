@@ -3,47 +3,35 @@ import { StyleSheet } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { View, Card, Button, Text, Colors, Assets } from 'react-native-ui-lib';
 
-const itemData = [
-  {
-    key: 'professional',
-    icon: (
-      <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
-        <Text style={{fontSize: 20}}>Professional</Text>
-        <Text style={{fontSize: 50}}>🤝</Text>
-      </View>
-    )
-  },
-  {
-    key: 'personal',
-    icon: (
-      <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
-        <Text style={{fontSize: 20}}>Personal</Text>
-        <Text style={{fontSize: 50}}>🔒</Text>
-      </View>
-    )
-  },
-  {
-    key: 'academic',
-    icon: (
-      <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
-        <Text style={{fontSize: 20}}>Academic</Text>
-        <Text style={{fontSize: 50}}>📚</Text>
-      </View>
-    )
-  },
-];
+var profiles = require('./data.json');
+var cardData = [];
+
+function getData() {
+  for (let key in profiles) {
+    cardData.push({
+      name: profiles[key]?.name,
+      icon: profiles[key]?.icon,
+    })
+  }
+}
 
 const Item = ({ item }) => {
-  return <Card style={styles.card}>{item.icon}</Card>;
+  return (
+    <Card style={styles.card}>
+      <Text style={{fontSize: 20}}>{item.name}</Text>
+      <Text style={{fontSize: 50}}>{item.icon}</Text>
+    </Card>
+  );
 };
 
 export default function HomePage() {
+  getData();
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Contact.ly</Text>
       <View style={styles.grid}>
         <FlatList
-          data={itemData}
+          data={cardData}
           numColumns={2}
           renderItem={Item}
           keyExtractor={(item) => item.alt}
@@ -79,7 +67,6 @@ const styles = StyleSheet.create({
     width: 150, 
     backgroundColor: Colors.grey50,
     margin: 10,
-    // padding: 10,
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
