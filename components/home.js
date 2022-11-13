@@ -1,42 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { View, Card, Button, Text, Colors, Assets } from 'react-native-ui-lib';
+import { View, Card, Button, Text, GridList, Colors, Spacings, Assets } from 'react-native-ui-lib';
 
 var profiles = require('./data.json');
 var cardData = [];
 
-function getData() {
+function getProfilesData() {
+  cardData = [];
   for (let key in profiles) {
     cardData.push({
+      key: key,
       name: profiles[key]?.name,
       icon: profiles[key]?.icon,
     })
   }
 }
 
-const Item = ({ item }) => {
-  return (
-    <Card style={styles.card}>
-      <Text style={{fontSize: 20}}>{item.name}</Text>
-      <Text style={{fontSize: 50}}>{item.icon}</Text>
-    </Card>
-  );
-};
-
-export default function HomePage() {
-  getData();
+export default function HomePage({ navigation }) {
+  console.log('home');
+  getProfilesData();
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Contact.ly</Text>
-      <View style={styles.grid}>
-        <FlatList
-          data={cardData}
-          numColumns={2}
-          renderItem={Item}
-          keyExtractor={(item) => item.alt}
-        />
-      </View>
+      <GridList
+        data={cardData}
+        containerWidth={360}
+        numColumns={2}
+        itemSpacing={Spacings.s1}
+        listPadding={Spacings.s1}
+        renderItem={({ item }) => (
+          <Card 
+            style={styles.card} 
+            onPress={() => navigation.navigate('Profile', {
+              itemId: item.key,
+              profile: profiles[item.key]
+            })}
+          >
+            <Text style={{fontSize: 20}}>{item.name}</Text>
+            <Text style={{fontSize: 50}}>{item.icon}</Text>
+          </Card>
+        )}
+        style={{margin: 25}}
+      />
       <Button 
         size={'large'}
         borderRadius={10}
@@ -50,9 +55,7 @@ export default function HomePage() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'flex-start',
@@ -60,19 +63,18 @@ const styles = StyleSheet.create({
   grid: {
     marginHorizontal: 'auto',
     marginVertical: 25,
-    width: 340
   },
   card: {
     height: 150, 
     width: 150, 
     backgroundColor: Colors.grey50,
-    margin: 10,
+    paddingVertical: 25,
+    margin: 15,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   text: {
     fontSize: 50,
-    paddingTop: 75, 
-    paddingBottom: 25 
+    marginTop: 25
   }
 });

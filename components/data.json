@@ -3,24 +3,38 @@
         "name": "Professional",
         "icon": "🤝",
         "Phone": "123-456-7890",
-        "Email": "abc@illinois.edu",
-        "Instagram": "abc1234",
+        "Email": "professional@illinois.edu",
         "LinkedIn": "https://www.linkedin.com/in/12345/"
     },
     "personal": {
         "name": "Personal",
         "icon": "🔒",
         "Phone": "123-456-7890",
-        "Email": "abc@illinois.edu",
-        "Instagram": "abc1234",
-        "LinkedIn": "https://www.linkedin.com/in/12345/"
+        "Email": "personal@illinois.edu",
+        "Instagram": "@abc1234",
+        "Snapchat": "abcdef",
+        "Facebook": "abc1234",
+        "a": "a",
+        "b": "a",
+        "c": "a",
+        "d": "a",
+        "e": "a",
+        "f": "a",
+        "g": "a",
+        "h": "a"
     },
     "academic": {
         "name": "Academic",
         "icon": "📚",
         "Phone": "123-456-7890",
-        "Email": "abc@illinois.edu",
-        "Instagram": "abc1234",
-        "LinkedIn": "https://www.linkedin.com/in/12345/"
+        "Email": "academic@illinois.edu",
+        "LinkedIn": "https://www.linkedin.com/in/12345/",
+        "Website": "abc.com"
+    },
+    "dating": {
+        "name": "Dating",
+        "icon": "😘",
+        "Instagram": "@abc1234",
+        "Tinder": "abcdef"
     }
 }
