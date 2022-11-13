@@ -1,6 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { View, Button, Text, GridList, Colors, Spacings } from 'react-native-ui-lib';
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 var profileData = [];
 
@@ -24,7 +27,7 @@ export default function ProfilePage({ route, navigation }) {
       <Text style={{fontSize: 40, marginTop: 25}}>{profile.icon + ' ' + profile.name}</Text>
       <GridList
         data={profileData}
-        containerWidth={360}
+        containerWidth={width}
         numColumns={1}
         itemSpacing={Spacings.s1}
         listPadding={Spacings.s1}
@@ -33,11 +36,10 @@ export default function ProfilePage({ route, navigation }) {
             <Text style={{fontSize: 15, marginBottom: 2, color: Colors.grey20}}>{item.caption}</Text>
             <Text style={{fontSize: 18, marginBottom: 6}}>{item.value}</Text>
           </View>
-
         )}
-        style={{margin: 25, height: '50%'}}
+        style={{margin: 25, height: (height / 3)}}
       />
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', marginBottom: 75}}>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', marginBottom: 50}}>
         <View style={styles.buttonView}>
           <Button 
             size={'large'}
@@ -68,16 +70,12 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'flex-start',
   },
-  grid: {
-    marginHorizontal: 'auto',
-    marginVertical: 25,
-  },
   buttonView: {
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'space-evenly',
-    width: '90%'
+    width: width - 20
   },
   icon: {
     tintColor: Colors.grey10,
