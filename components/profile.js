@@ -17,12 +17,11 @@ function getProfileAttributes(profile) {
 }
 
 export default function ProfilePage({ route, navigation }) {
-  console.log('profile');
   const { itemId, profile } = route.params;
   getProfileAttributes(profile);
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 50, marginTop: 25}}>{profile.icon + ' ' + profile.name}</Text>
+      <Text style={{fontSize: 40, marginTop: 25}}>{profile.icon + ' ' + profile.name}</Text>
       <GridList
         data={profileData}
         containerWidth={360}
@@ -32,7 +31,7 @@ export default function ProfilePage({ route, navigation }) {
         renderItem={({ item }) => (
           <View>
             <Text style={{fontSize: 15, marginBottom: 2, color: Colors.grey20}}>{item.caption}</Text>
-            <Text style={{fontSize: 20, marginBottom: 7}}>{item.value}</Text>
+            <Text style={{fontSize: 18, marginBottom: 6}}>{item.value}</Text>
           </View>
 
         )}
