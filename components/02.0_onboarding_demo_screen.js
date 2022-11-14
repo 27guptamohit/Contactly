@@ -3,6 +3,7 @@ import React, {useState, useRef} from "react";
 import {Text, View, StyleSheet, FlatList, Animated} from "react-native";
 import {slideData} from "./02.1_onboarding_screen_data";
 import OnboardingItem from "./02.2_onboarding_item";
+import Paginator from "./02.3_paginator";
 
 export default function Onboarding() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +22,7 @@ export default function Onboarding() {
                 <FlatList data={slideData}
                           renderItem={({item}) => <OnboardingItem item={item} />}
                           horizontal
-                          showsHorizontalScrollIndicator
+                          showsHorizontalScrollIndicator={false}
                           pagingEnabled
                           bounces={false}
                           keyExtractor={(item) => item.id}
@@ -33,6 +34,8 @@ export default function Onboarding() {
                           ref={slidesRef}
                 />
             </View>
+
+            <Paginator data={slideData} scrollX={scrollX}/>
         </View>
     )
 }

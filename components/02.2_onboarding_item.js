@@ -1,6 +1,5 @@
 import React from "react";
-import {View, Text, StyleSheet, FlatList, Image, useWindowDimensions} from "react-native";
-import {slideData} from "./02.1_onboarding_screen_data";
+import {View, Text, StyleSheet, Image, useWindowDimensions} from "react-native";
 
 export default function OnboardingItem({item}) {
     const {width} = useWindowDimensions();
