@@ -4,7 +4,7 @@ import Demo from "./components/demo";
 import Onboarding from "./components/02.0_onboarding_demo_screen";
 
 export default function App() {
-  return <Onboarding></Onboarding>;
+  return <View style={styles.container}><Text>Hello</Text></View>
 }
 
 const styles = StyleSheet.create({
