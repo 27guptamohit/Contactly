@@ -5,7 +5,7 @@ import { View, Card, Button, Text, GridList, Colors, Spacings, Assets } from 're
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-var profiles = require('./data.json');
+var profiles = require('../data/data.json');
 var cardData = [];
 
 function getProfilesData() {

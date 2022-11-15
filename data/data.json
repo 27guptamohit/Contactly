@@ -1,7 +1,7 @@
 {
     "professional": {
         "name": "Professional",
-        "icon": "🤝",
+        "icon": "👨🏻‍💼",
         "Phone": "123-456-7890",
         "Email": "professional@illinois.edu",
         "LinkedIn": "https://www.linkedin.com/in/12345/"
@@ -33,7 +33,7 @@
     },
     "dating": {
         "name": "Dating",
-        "icon": "😘",
+        "icon": "❤️",
         "Instagram": "@abc1234",
         "Tinder": "abcdef"
     }
