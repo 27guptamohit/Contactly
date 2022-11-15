@@ -1,0 +1,44 @@
+{
+    "professional": {
+        "title": "Professional",
+        "icon": "👨🏻‍💼",
+        "Name": "Jane Doe",
+        "Phone": "123-456-7890",
+        "Email": "professional@illinois.edu",
+        "LinkedIn": "https://www.linkedin.com/in/12345/"
+    },
+    "personal": {
+        "title": "Personal",
+        "icon": "🔒",
+        "Name": "Jane Doe",
+        "Phone": "123-456-7890",
+        "Email": "personal@illinois.edu",
+        "Instagram": "@abc1234",
+        "Snapchat": "abcdef",
+        "Facebook": "abc1234",
+        "a": "a",
+        "b": "a",
+        "c": "a",
+        "d": "a",
+        "e": "a",
+        "f": "a",
+        "g": "a",
+        "h": "a"
+    },
+    "academic": {
+        "title": "Academic",
+        "icon": "📚",
+        "Name": "Jane Doe",
+        "Phone": "123-456-7890",
+        "Email": "academic@illinois.edu",
+        "LinkedIn": "https://www.linkedin.com/in/12345/",
+        "Website": "abc.com"
+    },
+    "dating": {
+        "title": "Dating",
+        "icon": "❤️",
+        "Name": "Jane Doe",
+        "Instagram": "@abc1234",
+        "Tinder": "abcdef"
+    }
+}
