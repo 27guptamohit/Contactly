@@ -2,9 +2,8 @@ import Dialog from "react-native-ui-lib/dialog";
 import QRCode from "react-native-qrcode-svg";
 import Svg, { Path } from "react-native-svg";
 import { Share, StyleSheet, TouchableOpacity } from "react-native";
-import View from "react-native-ui-lib/view"
+import View from "react-native-ui-lib/view";
 import React, { useEffect, useState } from "react";
-
 
 const onShare = async () => {
   try {
@@ -27,12 +26,10 @@ const onShare = async () => {
 };
 
 export default function ShareContact(props) {
-  const visible = props.visible;
-  const panDirection = props.panDirection;
   return (
     <Dialog
-      visible={visible}
-      panDirection={panDirection}
+      visible={props.visible}
+      panDirection={props.panDirection}
       height={"70%"}
       width={"75%"}
     >
@@ -42,7 +39,12 @@ export default function ShareContact(props) {
         </View>
         <View flex center>
           <TouchableOpacity onPress={onShare}>
-            <Svg width={"128"} height={"128"} scale={"150%"} xmlns="http://www.w3.org/2000/svg">
+            <Svg
+              width={"128"}
+              height={"128"}
+              scale={"150%"}
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <Path
                 d="M30.3 13.7 25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"
                 fill={"#000000"}
