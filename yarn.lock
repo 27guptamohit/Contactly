@@ -1343,9 +1343,9 @@
     xmlbuilder "^14.0.0"
 
 "@expo/prebuild-config@~5.0.3":
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-5.0.7.tgz#4658b66126c4d32c7b6302571e458a71811b07aa"
-  integrity sha512-D+TBpJUHe4+oTGFPb4o0rrw/h1xxc6wF+abJnbDHUkhnaeiHkE2O3ByS7FdiZ2FT36t0OKqeSKG/xFwWT3m1Ew==
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-5.0.6.tgz#817d477ee76031d56a12514db52a27f5aec701b7"
+  integrity sha512-umHVsle+inPFPt+GMWRjZhkHwNbbaXpiEKbRnWKweInaXEZa9R9qt8gLyzniaREnw+/cEAIgL1znrKmNk4lUfQ==
   dependencies:
     "@expo/config" "~7.0.2"
     "@expo/config-plugins" "~5.0.3"
@@ -2483,9 +2483,9 @@ ci-info@^2.0.0:
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
 ci-info@^3.2.0, ci-info@^3.3.0:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.6.1.tgz#7594f1c95cb7fdfddee7af95a13af7dbc67afdcf"
-  integrity sha512-up5ggbaDqOqJ4UqLKZ2naVkyqSJQgJi5lwD6b6mM748ysrghDBX0bx/qJTUHzw7zu6Mq4gycviSF5hJnwceD8w==
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.5.0.tgz#bfac2a29263de4c829d806b1ab478e35091e171f"
+  integrity sha512-yH4RezKOGlOhxkmhbeNuC4eYZKAUsEaGtBuBzDDP1eFUKiccDWzBABxBfOx31IDwDIXMTxWuwAxUGModvkbuVw==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -2725,9 +2725,9 @@ copy-descriptor@^0.1.0:
   integrity sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==
 
 core-js-compat@^3.25.1:
-  version "3.26.1"
-  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.26.1.tgz#0e710b09ebf689d719545ac36e49041850f943df"
-  integrity sha512-622/KzTudvXCDLRw70iHW4KKs1aGpcRcowGWyYJr2DEBfRrd6hNJybxSWJFuZYD4ma86xhrwDDHxmDaIq4EA8A==
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.26.0.tgz#94e2cf8ba3e63800c4956ea298a6473bc9d62b44"
+  integrity sha512-piOX9Go+Z4f9ZiBFLnZ5VrOpBl0h7IGCkiFUN11QTe6LjAvOT3ifL/5TdoizMh99hcGy5SoLyWbapIY/PIb/3A==
   dependencies:
     browserslist "^4.21.4"
 
@@ -5610,9 +5610,9 @@ react-native-text-size@4.0.0-rc.1:
   integrity sha512-CysqjU2jK6Yc+a+kEI222pUyTY2ywcU2HqbFqf1KHymW6OPTdvBBHqbEJKL0QiLhQaFYDbqicM+h990s9TP00g==
 
 react-native-ui-lib@^6.23.1:
-  version "6.23.2"
-  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.23.2.tgz#c9bbce2548b74e93eeaa391db720e195f4a3b595"
-  integrity sha512-PQHLIKKuaSFTtu96b8zK9Y1cKhjtD2IaI1myzf5kEmPSFf1M69oHMkttLaoFv1CN6o8zj9Rdd4HVE5htAx/nRA==
+  version "6.23.1"
+  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.23.1.tgz#8b9c752be8fde603d2b7dc2010f09e8ca6009e3a"
+  integrity sha512-P/Qk3BUBH2wriDZbXKg7mu9ffxwTVJGB/EVY7JKuEtJqMb0sBql/bDyn0CWQGENqIY3oMQMsW5d4yzjlh4Rg7w==
   dependencies:
     babel-plugin-transform-inline-environment-variables "^0.0.2"
     color "^3.1.0"
@@ -5759,16 +5759,16 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     safe-regex "^1.1.0"
 
 regexpu-core@^5.1.0:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-5.2.2.tgz#3e4e5d12103b64748711c3aad69934d7718e75fc"
-  integrity sha512-T0+1Zp2wjF/juXMrMxHxidqGYn8U4R+zleSJhX9tQ1PUsS8a9UtYfbsF9LdiVgNX3kiX8RNaKM42nfSgvFJjmw==
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-5.2.1.tgz#a69c26f324c1e962e9ffd0b88b055caba8089139"
+  integrity sha512-HrnlNtpvqP1Xkb28tMhBUO2EbyUHdQlsnlAhzWcwHy8WJR53UWr7/MAvqrsQKMbV4qdpv03oTMG8iIhfsPFktQ==
   dependencies:
     regenerate "^1.4.2"
     regenerate-unicode-properties "^10.1.0"
     regjsgen "^0.7.1"
     regjsparser "^0.9.1"
     unicode-match-property-ecmascript "^2.0.0"
-    unicode-match-property-value-ecmascript "^2.1.0"
+    unicode-match-property-value-ecmascript "^2.0.0"
 
 regjsgen@^0.7.1:
   version "0.7.1"
@@ -6667,10 +6667,10 @@ unicode-match-property-ecmascript@^2.0.0:
     unicode-canonical-property-names-ecmascript "^2.0.0"
     unicode-property-aliases-ecmascript "^2.0.0"
 
-unicode-match-property-value-ecmascript@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/unicode-match-property-value-ecmascript/-/unicode-match-property-value-ecmascript-2.1.0.tgz#cb5fffdcd16a05124f5a4b0bf7c3770208acbbe0"
-  integrity sha512-qxkjQt6qjg/mYscYMC0XKRn3Rh0wFPlfxB0xkt9CfyTvpX1Ra0+rAmdX2QyAobptSEvuy4RtpPRui6XkV+8wjA==
+unicode-match-property-value-ecmascript@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/unicode-match-property-value-ecmascript/-/unicode-match-property-value-ecmascript-2.0.0.tgz#1a01aa57247c14c568b89775a54938788189a714"
+  integrity sha512-7Yhkc0Ye+t4PNYzOGKedDhXbYIBe1XEQYQxOPyhcXNMJ0WCABqqj6ckydd6pWRZTHV4GuCPKdBAUiMc60tsKVw==
 
 unicode-property-aliases-ecmascript@^2.0.0:
   version "2.1.0"

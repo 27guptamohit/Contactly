@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions } from 'react-native';
-import { View, Button, Text, GridList, Colors, Spacings } from 'react-native-ui-lib';
+import { View, Button, Text, GridList, Image, Colors, Spacings } from 'react-native-ui-lib';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -10,7 +10,7 @@ var profileData = [];
 function getProfileAttributes(profile) {
   profileData = [];
   for (let key in profile) {
-    if (key != 'name' && key != 'icon') {
+    if (key != 'title' && key != 'icon' & key != 'Name') {
       profileData.push({
         caption: key,
         value: profile[key]
@@ -24,7 +24,16 @@ export default function ProfilePage({ route, navigation }) {
   getProfileAttributes(profile);
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 40, marginTop: 25}}>{profile.icon + ' ' + profile.name}</Text>
+      <Text style={{fontSize: 40, marginVertical: 25}}>{profile.icon + ' ' + profile.title}</Text>
+      <Image 
+        source={require('../assets/placeholder.png')} 
+        style={{ 
+          borderRadius: height / 20, 
+          resizeMode: "contain",
+          height: height / 10,
+          aspectRatio: 1
+        }} />
+      <Text style={{fontSize: 18, marginVertical: 5}}>{profile.Name}</Text>
       <GridList
         data={profileData}
         containerWidth={width}
@@ -37,7 +46,7 @@ export default function ProfilePage({ route, navigation }) {
             <Text style={{fontSize: 18, marginBottom: 6}}>{item.value}</Text>
           </View>
         )}
-        style={{margin: 25, height: (height / 3)}}
+        style={{margin: 25, height: (0.25 * height)}}
       />
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', marginBottom: 50}}>
         <View style={styles.buttonView}>

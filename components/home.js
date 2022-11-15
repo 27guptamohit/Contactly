@@ -13,7 +13,7 @@ function getProfilesData() {
   for (let key in profiles) {
     cardData.push({
       key: key,
-      name: profiles[key]?.name,
+      title: profiles[key]?.title,
       icon: profiles[key]?.icon,
     })
   }
@@ -38,7 +38,7 @@ export default function HomePage({ navigation }) {
               profile: profiles[item.key]
             })}
           >
-            <Text style={{fontSize: 18}}>{item.name}</Text>
+            <Text style={{fontSize: 18}}>{item.title}</Text>
             <Text style={{fontSize: 50}}>{item.icon}</Text>
           </Card>
         )}
