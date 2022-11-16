@@ -11,10 +11,14 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "expo": "~46.0.16",
+    "expo-constants": "~13.2.4",
+    "expo-image-picker": "~13.3.1",
     "expo-status-bar": "~1.4.0",
     "react": "18.0.0",
     "react-native": "0.69.6",
     "react-native-gesture-handler": "~2.5.0",
+    "react-native-image-picker": "^4.10.1",
+    "react-native-paper": "^4.12.5",
     "react-native-reanimated": "~2.9.1",
     "react-native-svg": "^9.13.3",
     "react-native-ui-lib": "^6.23.2"
