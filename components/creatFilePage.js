@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TextInput, Dimensions, 
          ScrollView, ScrollViewBase } from "react-native";
 import { View, Button, GridList, Colors, Spacings, Icon,
-         Text, Assets, Image } from 'react-native-ui-lib';
+         Text, Assets, Image, TextField} from 'react-native-ui-lib';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -94,7 +94,7 @@ export default function EditProfilePage({ route, navigation }) {
         <Text style={{ fontSize: 40, marginVertical: 25, paddingRight: 20 }}>
           {profile.icon}
         </Text>
-        <TextInput
+        <TextField
           style={styles.textinput}
           onChangeText={onChangeText}
           defaultValue={profile.title}
@@ -111,7 +111,7 @@ export default function EditProfilePage({ route, navigation }) {
           aspectRatio: 1,
         }}
       />
-      <TextInput 
+      <TextField 
         style={{ fontSize: 18, marginVertical: 5 }}
         onChangeText={onChangenameText}
         defaultValue={profile.Name}
@@ -128,7 +128,7 @@ export default function EditProfilePage({ route, navigation }) {
             <Text style={{fontSize: 15, marginBottom: 2, color: Colors.grey20}}>
               {item.caption}
             </Text>
-            <TextInput style={{fontSize: 18, marginBottom: 6}}
+            <TextField style={{fontSize: 18, marginBottom: 6}}
               onChangeText={event => changeProfileValue(event, item.caption)}              
               defaultValue={item.value}
               backgroundColor={Colors.grey50}
@@ -137,7 +137,7 @@ export default function EditProfilePage({ route, navigation }) {
               numberOfLines={2}
               
             >
-            </TextInput>
+            </TextField>
           </View>
 
         )}

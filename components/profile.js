@@ -11,7 +11,7 @@ import {
   PanningProvider,
 } from "react-native-ui-lib";
 import { useState } from "react";
-import ShareContact from "./contactsharing/shareDialog";
+import ShareContact from "./shareDialog";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 

@@ -1,4 +1,4 @@
-import Dialog from "react-native-ui-lib/dialog";
+import {Dialog, Button, Colors} from "react-native-ui-lib";
 import QRCode from "react-native-qrcode-svg";
 import Svg, { Path } from "react-native-svg";
 import { Share, StyleSheet, TouchableOpacity } from "react-native";
@@ -38,24 +38,15 @@ export default function ShareContact(props) {
           <QRCode value={"https://google.com"}></QRCode>
         </View>
         <View flex center>
-          <TouchableOpacity onPress={onShare}>
-            <Svg
-              width={"128"}
-              height={"128"}
-              scale={"150%"}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <Path
-                d="M30.3 13.7 25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"
-                fill={"#000000"}
-              />
-              <Path d="M24 7h2v21h-2z" fill={"#000000"} />
-              <Path
-                fill={"#000000"}
-                d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"
-              />
-            </Svg>
-          </TouchableOpacity>
+        <Button
+            size={"medium"}
+            style={{ padding: 15 }}
+            borderRadius={10}
+            backgroundColor={Colors.grey50}
+            iconSource={require("../assets/share.png")}
+            iconStyle={styles.icon}
+            onPress={onShare}
+          />
         </View>
       </View>
     </Dialog>
