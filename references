@@ -5,6 +5,8 @@ Additional Dependencies:
 2. npm install @expo/vector-icons
 3. expo install expo-image-picker
 4. expo install expo-constants
+5. npm install react-navigation-stack
+6. npm install react-navigation
 
 1. Onboarding screen:
 https://www.youtube.com/watch?v=r2NJJye0XnM
@@ -12,4 +14,7 @@ https://www.youtube.com/watch?v=Efy48Uoa4RM
 
 2. Expo image picker:
 https://www.youtube.com/watch?v=WJurrdtZOc0
+
+3. Dynamically adding the field:
+https://github.com/Osamasomy/dynamic-Inputs/blob/master/src/screens/HomeScreen.js
 

@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, {useState, useEffect } from "react";
-import {StyleSheet, Text, View, Image, Button, Platform, TouchableOpacity, TextInput, ScrollView} from "react-native";
+import {StyleSheet, Text, View, Image, Button, Platform, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from "expo-constants";
 
 
-export default function EditMasterProfile() {
+export default function EditMasterProfile({navigation}) {
   const [image, setImage] = useState(null)
   const [inputs, setInputs] = useState([{key: '', value: ''}]);
 
@@ -65,9 +65,13 @@ export default function EditMasterProfile() {
 
   }
 
+  const pressHandler = () => {
+        navigation.navigate('MasterProfileHomeScreen')
+    }
+
   return (
 
-      <View style={styles.container_main}>
+      <SafeAreaView style={styles.container_main}>
 
         <ScrollView style={styles.inputsContainer}>
         <View style={styles.container_1}>
@@ -120,12 +124,17 @@ export default function EditMasterProfile() {
         </View>
 
         <View style={styles.container_1}>
-          <Button title="Save"/>
+          <TouchableOpacity style={[styles.addButtonStyle, {backgroundColor: "#76d77c"}]}
+          onPress={pressHandler}>
+            <Text style={[styles.addButtonText, {backgroundColor: "#76d77c"}]}>
+              Save
+            </Text>
+          </TouchableOpacity>
         </View>
 
         </ScrollView>
 
-      </View>
+      </SafeAreaView>
   )
 }
 
@@ -136,6 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 30
   },
 
   container_1: {
