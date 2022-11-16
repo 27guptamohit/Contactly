@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, {useState, useEffect } from "react";
 import {StyleSheet, Text, View, Image, Button, Platform, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from "react-native";
+import {Avatar, Title, Caption, TouchableRipple} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from "expo-constants";
 
@@ -75,7 +76,7 @@ export default function EditMasterProfile({navigation}) {
 
         <ScrollView style={styles.inputsContainer}>
         <View style={styles.container_1}>
-          {image && <Image source={{uri:image}} style={{width:100, height: 100, marginBottom:10}}/>}
+          {image && <Avatar.Image source={{uri:image}} size={120} style={{ marginBottom:10}}/>}
             <Button title="Choose Profile Image"
                 onPress={PickImage} />
         </View>

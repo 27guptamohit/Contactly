@@ -7,6 +7,8 @@ Additional Dependencies:
 4. expo install expo-constants
 5. npm install react-navigation-stack
 6. npm install react-navigation
+7.  npm install react-native-vector-icons
+
 
 1. Onboarding screen:
 https://www.youtube.com/watch?v=r2NJJye0XnM
@@ -17,4 +19,9 @@ https://www.youtube.com/watch?v=WJurrdtZOc0
 
 3. Dynamically adding the field:
 https://github.com/Osamasomy/dynamic-Inputs/blob/master/src/screens/HomeScreen.js
+
+4. Navigation:
+https://www.youtube.com/watch?v=cS4PgI3zBzY
+
+
 
