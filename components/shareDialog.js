@@ -30,6 +30,7 @@ export default function ShareContact(props) {
     <Dialog
       visible={props.visible}
       panDirection={props.panDirection}
+      onDismiss={props.toggleOff}
       height={"70%"}
       width={"75%"}
     >
@@ -59,5 +60,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 15
   },
+  icon: {
+    tintColor: Colors.grey30,
+    resizeMode: "contain",
+    height: 75,
+    width: 75,
+  }
 });

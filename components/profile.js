@@ -35,6 +35,9 @@ export default function ProfilePage({ route, navigation }) {
   const toggleDialog = () => {
     setVisible(!visible);
   };
+  const toggleOff = () => {
+    setVisible(false);
+  }
   getProfileAttributes(profile);
   return (
     <View style={styles.container}>
@@ -106,7 +109,7 @@ export default function ProfilePage({ route, navigation }) {
         {...{
           visible: visible,
           panDirection: PanningProvider.Directions.DOWN,
-          toggleDialog: toggleDialog
+          toggleOff: toggleOff,
         }}
       ></ShareContact>
     </View>

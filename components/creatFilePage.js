@@ -1,9 +1,9 @@
-import React, {Component, useState} from 'react';
+// import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Dimensions, 
-         ScrollView, ScrollViewBase } from "react-native";
-import { View, Button, GridList, Colors, Spacings, Icon,
-         Text, Assets, Image, TextField} from 'react-native-ui-lib';
+import { StyleSheet, Dimensions } from "react-native";
+import { View, Button, GridList, Colors, Spacings,
+         Text, Assets, Image, Incubator } from 'react-native-ui-lib';
+const {TextField} = Incubator;
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -25,81 +25,81 @@ export default function EditProfilePage({ route, navigation }) {
   const { itemId, profile } = route.params;
   getProfileAttributes(profile)
   var customData = profile
-  // console.log(customData)
+
   // const [selectedValue, setSelectedValue] = useState("");
-  const [bodyText , setBodyText ] = useState("");
-  const [text, onChangeText] = useState("");
-  const [nameText, onChangenameText] = useState("");
+  // const [bodyText , setBodyText ] = useState("");
+  // const [text, onChangeText] = useState("");
+  // const [nameText, onChangenameText] = useState("");
 
   const changeProfileValue = (value, field) =>{
-    setBodyText(value)
     customData[field] = value
   }
 
   const updateProfile = (itemId, profile) => {
     console.log("Update Profile")
-    // let data=customData
-    // writeJsonFile('./test.json', data)
-    console.log("Finish Update Profile")
     navigation.navigate('Profile', {
       itemId: itemId,
       profile: profile
     })
+    console.log("Finish Update Profile")
   }
 
-  const [fieldsname, setFieldsname] = useState([{ value: null }]);
+  // const [fieldsname, setFieldsname] = useState([{ value: null }]);
 
-  function handleChange(i, event) {
-    const values = [...fieldsname];
-    // console.log(values)
-    values[i].value = event;
-    setFieldsname(values);
-  }
+  // function handleChange(i, event) {
+  //   const values = [...fieldsname];
+  //   // console.log(values)
+  //   values[i].value = event;
+  //   setFieldsname(values);
+  // }
 
-  const [fieldsvalue, setFieldsvalue] = useState([{ value: null }]);
+  // const [fieldsvalue, setFieldsvalue] = useState([{ value: null }]);
 
-  function handleChangeValue(i, event) {
-    const values = [...fieldsvalue];
-    // console.log(values)
-    values[i].value = event;
-    setFieldsvalue(values);
-  }
+  // function handleChangeValue(i, event) {
+  //   const values = [...fieldsvalue];
+  //   // console.log(values)
+  //   values[i].value = event;
+  //   setFieldsvalue(values);
+  // }
 
 
-  function handleAdd() {
-    const names = [...fieldsname];
-    names.push({ value: null });
-    setFieldsname(names);
+  // function handleAdd() {
+  //   const names = [...fieldsname];
+  //   names.push({ value: null });
+  //   setFieldsname(names);
 
-    const values = [...fieldsvalue];
-    values.push({ value: null });
-    setFieldsvalue(values);
-  }
+  //   const values = [...fieldsvalue];
+  //   values.push({ value: null });
+  //   setFieldsvalue(values);
+  // }
 
-  function handleRemove(i) {
-    const names = [...fieldsname];
-    names.splice(i, 1);
-    setFieldsname(names);
+  // function handleRemove(i) {
+  //   const names = [...fieldsname];
+  //   names.splice(i, 1);
+  //   setFieldsname(names);
 
-    const values = [...fieldsvalue];
-    values.splice(i, 1);
-    setFieldsvalue(values);
-  }
+  //   const values = [...fieldsvalue];
+  //   values.splice(i, 1);
+  //   setFieldsvalue(values);
+  // }
 
 
 
   return (
     <View style={styles.container}>
       <View style={styles.profileName}>
-        <Text style={{ fontSize: 40, marginVertical: 25, paddingRight: 20 }}>
-          {profile.icon}
-        </Text>
+        <TextField 
+          onChangeText={event => changeProfileValue(event, "icon")}
+          defaultValue={profile.icon}
+          textAlign={"center"}
+          maxLength={1}
+          style={[styles.textinput, {marginRight: 5}]}>
+        </TextField>
         <TextField
-          style={styles.textinput}
-          onChangeText={onChangeText}
+          style={[styles.textinput, {minWidth: width-250}]}
+          onChangeText={event => changeProfileValue(event, "title")}
           defaultValue={profile.title}
           textAlign={"center"}
-          backgroundColor={Colors.grey50}
         />
       </View>
       <Image
@@ -112,10 +112,9 @@ export default function EditProfilePage({ route, navigation }) {
         }}
       />
       <TextField 
-        style={{ fontSize: 18, marginVertical: 5 }}
-        onChangeText={onChangenameText}
+        style={styles.name}
+        onChangeText={event => changeProfileValue(event, "Name")}
         defaultValue={profile.Name}
-        backgroundColor={Colors.grey50}
       />
       <GridList styles={styles.grid}
         data={profileData}
@@ -125,65 +124,19 @@ export default function EditProfilePage({ route, navigation }) {
         listPadding={Spacings.s1}
         renderItem={({ item }) => (
           <View>
-            <Text style={{fontSize: 15, marginBottom: 2, color: Colors.grey20}}>
+            <Text style={{fontSize: 15, marginBottom: 2, marginLeft: '2.5%', color: Colors.grey40}}>
               {item.caption}
             </Text>
-            <TextField style={{fontSize: 18, marginBottom: 6}}
+            <TextField style={styles.fields}
               onChangeText={event => changeProfileValue(event, item.caption)}              
               defaultValue={item.value}
-              backgroundColor={Colors.grey50}
-              // value={bodyText}
               multiline
               numberOfLines={2}
-              
-            >
-            </TextField>
+            />
           </View>
 
         )}
       />
-
-
-      {/* <ScrollView style={styles.scrollView}>
-        {fieldsname.map((field, idx) => {
-          return (
-            <View key={`${field}-${idx}`}>
-              <Button 
-                title="sub" 
-                label={'Delete this contact'}
-                size={'small'}
-                iconSource={Assets.icons.x}
-                onPress={() => handleRemove(idx)} 
-              />
-
-              <TextInput
-                type="text"
-                placeholder="Enter field name"
-                value={field.value}
-                onChangeText={(text) => handleChange(idx, text)}
-              />
-              <TextInput
-                type="text"
-                placeholder="Enter field data"
-                value={fieldsvalue[idx]}
-                onChangeText={(text) => handleChangeValue(idx, text)}
-              />
-              
-            </View>
-          );
-        })}
-
-        <Button 
-          title="add" 
-          label={'Add new contacts'}
-          size={'small'}
-          iconSource={Assets.icons.plusSmall}
-          onPress={() => handleAdd()} 
-        />
-
-      </ScrollView> */}
-
-
       <Button 
         size={'large'}
         borderRadius={10}
@@ -200,14 +153,31 @@ export default function EditProfilePage({ route, navigation }) {
 
 
 const styles = StyleSheet.create({
-  profileName:{
+  profileName: {
     flexDirection: 'row',
   },
   textinput: {
     fontSize: 35,
     marginVertical: 25,
-    width: width-180,
-    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey40
+  },
+  name: { 
+    fontSize: 18, 
+    marginVertical: 5, 
+    paddingHorizontal: 5, 
+    borderBottomWidth: 1, 
+    borderBottomColor: 
+    Colors.grey40 
+  },
+  fields: {
+    fontSize: 18, 
+    marginBottom: 6, 
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey40,
+    marginLeft: '2.5%', 
+    width: '90%',
   },
   grid:{
     backgroundColor: 'gray',
