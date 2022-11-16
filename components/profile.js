@@ -85,6 +85,10 @@ export default function ProfilePage({ route, navigation }) {
             backgroundColor={Colors.grey50}
             iconSource={require("../assets/edit.png")}
             iconStyle={styles.icon}
+            onPress={() => navigation.navigate('EditProfile', {
+              itemId: itemId,
+              profile: profile
+            })}
           />
           <Button
             size={"large"}
