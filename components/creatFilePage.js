@@ -1,4 +1,3 @@
-// import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions } from "react-native";
 import { View, Button, GridList, Colors, Spacings,
@@ -26,11 +25,6 @@ export default function EditProfilePage({ route, navigation }) {
   getProfileAttributes(profile)
   var customData = profile
 
-  // const [selectedValue, setSelectedValue] = useState("");
-  // const [bodyText , setBodyText ] = useState("");
-  // const [text, onChangeText] = useState("");
-  // const [nameText, onChangenameText] = useState("");
-
   const changeProfileValue = (value, field) =>{
     customData[field] = value
   }
@@ -43,47 +37,6 @@ export default function EditProfilePage({ route, navigation }) {
     })
     console.log("Finish Update Profile")
   }
-
-  // const [fieldsname, setFieldsname] = useState([{ value: null }]);
-
-  // function handleChange(i, event) {
-  //   const values = [...fieldsname];
-  //   // console.log(values)
-  //   values[i].value = event;
-  //   setFieldsname(values);
-  // }
-
-  // const [fieldsvalue, setFieldsvalue] = useState([{ value: null }]);
-
-  // function handleChangeValue(i, event) {
-  //   const values = [...fieldsvalue];
-  //   // console.log(values)
-  //   values[i].value = event;
-  //   setFieldsvalue(values);
-  // }
-
-
-  // function handleAdd() {
-  //   const names = [...fieldsname];
-  //   names.push({ value: null });
-  //   setFieldsname(names);
-
-  //   const values = [...fieldsvalue];
-  //   values.push({ value: null });
-  //   setFieldsvalue(values);
-  // }
-
-  // function handleRemove(i) {
-  //   const names = [...fieldsname];
-  //   names.splice(i, 1);
-  //   setFieldsname(names);
-
-  //   const values = [...fieldsvalue];
-  //   values.splice(i, 1);
-  //   setFieldsvalue(values);
-  // }
-
-
 
   return (
     <View style={styles.container}>
@@ -134,7 +87,6 @@ export default function EditProfilePage({ route, navigation }) {
               numberOfLines={2}
             />
           </View>
-
         )}
       />
       <Button 

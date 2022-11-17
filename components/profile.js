@@ -5,7 +5,7 @@ import {
   Button,
   Text,
   GridList,
-  Image,
+  Avatar,
   Colors,
   Spacings,
   PanningProvider,
@@ -44,14 +44,15 @@ export default function ProfilePage({ route, navigation }) {
       <Text style={{ fontSize: 40, marginVertical: 25 }}>
         {profile.icon + " " + profile.title}
       </Text>
-      <Image
+      <Avatar
         source={require("../assets/placeholder.png")}
-        style={{
-          borderRadius: height / 20,
-          resizeMode: "contain",
-          height: height / 10,
-          aspectRatio: 1,
-        }}
+        size={120}
+        // style={{
+        //   borderRadius: height / 20,
+        //   resizeMode: "contain",
+        //   height: height / 10,
+        //   aspectRatio: 1,
+        // }}
       />
       <Text style={{ fontSize: 18, marginVertical: 5 }}>{profile.Name}</Text>
       <GridList
