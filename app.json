@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Contactly",
+    "name": "Contact.ly",
     "slug": "Contactly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -22,12 +22,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon2_foreground.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ashelyeah.Contactly"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "397d3cb6-547c-4d7f-8841-08b0ec03c5a7"
+      }
     }
   }
 }

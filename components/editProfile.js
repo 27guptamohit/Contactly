@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions } from "react-native";
 import { View, Button, GridList, Colors, Spacings,
-         Text, Assets, Image, Incubator } from 'react-native-ui-lib';
-const {TextField} = Incubator;
+         Text, Assets, Incubator } from 'react-native-ui-lib';
+const { TextField } = Incubator;
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -45,7 +45,6 @@ export default function EditProfilePage({ route, navigation }) {
           onChangeText={event => changeProfileValue(event, "icon")}
           defaultValue={profile.icon}
           textAlign={"center"}
-          maxLength={1}
           style={[styles.textinput, {marginRight: 5}]}>
         </TextField>
         <TextField
@@ -55,7 +54,7 @@ export default function EditProfilePage({ route, navigation }) {
           textAlign={"center"}
         />
       </View>
-      <Image
+      {/* <Image
         source={require("../assets/placeholder.png")}
         style={{
           borderRadius: height / 20,
@@ -68,7 +67,7 @@ export default function EditProfilePage({ route, navigation }) {
         style={styles.name}
         onChangeText={event => changeProfileValue(event, "Name")}
         defaultValue={profile.Name}
-      />
+      /> */}
       <GridList styles={styles.grid}
         data={profileData}
         containerWidth={width}
@@ -102,7 +101,6 @@ export default function EditProfilePage({ route, navigation }) {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   profileName: {

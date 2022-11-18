@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HomePage from "./components/home";
 import ProfilePage from './components/profile';
-import EditProfilePage  from "./components/creatFilePage"
+import EditProfilePage  from "./components/editProfile"
+import CreateProfile from './components/createProfile';
 import CreateMasterButton from "./components/2_Create_Master_Profile/1_create_master_profile_button";
 import EditMasterProfile from "./components/2_Create_Master_Profile/2_edit_master_profile";
 import MasterProfileHome from "./components/2_Create_Master_Profile/3_show_master_profile";
@@ -81,6 +82,9 @@ export default function App() {
           <Stack.Screen 
             name="EditProfile" 
             component={EditProfilePage} />
+          <Stack.Screen
+            name="Create"
+            component={CreateProfile}/>
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>

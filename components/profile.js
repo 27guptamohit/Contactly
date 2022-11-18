@@ -44,17 +44,11 @@ export default function ProfilePage({ route, navigation }) {
       <Text style={{ fontSize: 40, marginVertical: 25 }}>
         {profile.icon + " " + profile.title}
       </Text>
-      <Avatar
+      {/* <Avatar
         source={require("../assets/placeholder.png")}
         size={120}
-        // style={{
-        //   borderRadius: height / 20,
-        //   resizeMode: "contain",
-        //   height: height / 10,
-        //   aspectRatio: 1,
-        // }}
       />
-      <Text style={{ fontSize: 18, marginVertical: 5 }}>{profile.Name}</Text>
+      <Text style={{ fontSize: 18, marginVertical: 5 }}>{profile.Name}</Text> */}
       <GridList
         data={profileData}
         containerWidth={width}
