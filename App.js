@@ -62,6 +62,12 @@ export default function App() {
         // Any needed logic for failure
       }
     }
+    async function clearAllData() {
+      AsyncStorage.getAllKeys()
+          .then(keys => AsyncStorage.multiRemove(keys))
+          .then(() => alert('success'));
+    } 
+    // clearAllData();
     // removeValue();
     checkMasterProfile();
   }, []);
