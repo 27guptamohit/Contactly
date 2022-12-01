@@ -1,21 +1,31 @@
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect, useRef } from "react";
 import { StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Avatar, View, Button, Colors, Assets, Incubator } from "react-native-ui-lib";
+import { Avatar, View, Button, Colors, Icon, Assets, Incubator, Picker } from "react-native-ui-lib";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const { TextField } = Incubator;
+import { FIELDS } from '../../utils/constants';
 
+const { TextField, WheelPicker } = Incubator;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
+const dropdown = require('../../assets/chevron.png');
+const dropdownIcon = <Icon 
+  source={dropdown} 
+  style={{ 
+    resizeMode: 'contain', 
+    height: 20, 
+    width: 20,
+   }} 
+  tintColor={Colors.$iconDefault}/>;
 
 export default function EditMasterProfile({ route, navigation }) {
   const { setHasMaster } = route.params
   const [image, setImage] = useState(null);
   const [name, setName] = useState('');
 
-  const [titleValue, setTitleValue] = useState('');
+  const [titleValue, setTitleValue] = useState(FIELDS[0]['value']);
   const [valValue, setValValue] = useState('');
   const [numInputs, setNumInputs] = useState(1);
   const refInputs = useRef([{key: titleValue, value: valValue}]);
@@ -34,7 +44,7 @@ export default function EditMasterProfile({ route, navigation }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1,1],
+      aspect: [1, 1],
       quality: 1
     })
 
@@ -44,7 +54,7 @@ export default function EditMasterProfile({ route, navigation }) {
   }
 
   const addHandler = () => {
-    refInputs.current.push([{key: '', value: ''}]);
+    refInputs.current.push({key: FIELDS[0]['value'], value: ''});
     setNumInputs(value => value + 1);
   }
 
@@ -56,6 +66,7 @@ export default function EditMasterProfile({ route, navigation }) {
   const inputTitleHandler = (index, value) => {
     refInputs.current[index]['key'] = value;
     setTitleValue(value);
+    console.log(refInputs.current);
   }
 
   const inputValueHandler = (index, value) => {
@@ -64,17 +75,24 @@ export default function EditMasterProfile({ route, navigation }) {
   }
 
   async function saveMasterProfile() {
-    const masterProfile = {'profile_pic': image, 'Name': name};
-    for (let i = 0; i < numInputs; i++) {
-      masterProfile[refInputs.current[i]['key']] = refInputs.current[i]['value'];
-    }
-    try {
-      await AsyncStorage.setItem('@master', JSON.stringify(masterProfile))
-    } catch (e) {
-      // saving error
-    }
-    if (setHasMaster !== null) {
-      setHasMaster();
+    const masterProfile = {'Image': image, 'Name': name};
+    if (numInputs > 0) {
+      for (let i = 0; i < numInputs; i++) {
+        if (refInputs.current[i]['key'] in masterProfile) {
+          masterProfile[refInputs.current[i]['key']].push(refInputs.current[i]['value']);
+        } else {
+          masterProfile[refInputs.current[i]['key']] = [refInputs.current[i]['value']];
+        }
+      }
+      console.log(JSON.stringify(masterProfile));
+      try {
+        await AsyncStorage.setItem('@master', JSON.stringify(masterProfile))
+      } catch (e) {
+        // saving error
+      }
+      if (setHasMaster !== null) {
+        setHasMaster();
+      }
     }
     // navigate();
   }
@@ -85,24 +103,33 @@ export default function EditMasterProfile({ route, navigation }) {
     inputs.push(
       <View key={i} style={styles.container_2}>
         <View style={{ flex: 1, flexDirection: 'row', width: '90%', justifyContent: 'center' }}>
-          <TextField
-            style={[styles.fields, { width: width / 4 }]}
-            onChangeText={(text) => inputTitleHandler(i, text)}
+          <Picker
+            onChange={item => inputTitleHandler(i, item.value)}
             value={refInputs.current[i]['key']}
-            placeholder={'Title'}
-            autoCapitalize={'none'}
-          />
+            style={{ fontSize: 20, }}
+            containerStyle={[{ paddingTop: 4, borderBottomWidth: 1,
+              borderColor: Colors.$outlineDisabledHeavy,
+              height: 35, width: width * 0.3 }]}
+            trailingAccessory={dropdownIcon}
+            migrateTextField
+            useSafeArea
+          >
+            {FIELDS.map(option => (
+              <Picker.Item 
+                key={option.key} value={option.value} label={option.label} 
+              />
+            ))}
+          </Picker>
           <TextField
-            style={[styles.fields, { marginHorizontal: 10, width: width / 2 }]}
+            style={[styles.fields, { marginLeft: 10, marginRight: 5, width: width / 2 }]}
             onChangeText={(text) => inputValueHandler(i, text)}
             value={refInputs.current[i]['value']}
-            placeholder={'Value'}
             autoCapitalize={'none'}
+            autoCorrect={false}
           />
           <Button 
-            size={'small'}
-            borderRadius={15}
-            backgroundColor={Colors.transparent}
+            backgroundColor={Colors.$backgroundPrimaryLight}
+            style={{ height: 30, width: 30 }}
             color={Colors.grey10}
             iconSource={require('../../assets/close.png')}
             iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
@@ -119,13 +146,13 @@ export default function EditMasterProfile({ route, navigation }) {
           source={image ? { uri: image } : require('../../assets/placeholder.png')} 
           size={120} 
           style={{ marginBottom: 10 }} />
-        <Button label="Choose Profile Image"
+        <Button label={image ? "Edit" : "Choose Image"}
           onPress={PickImage}
           backgroundColor={Colors.transparent}
           color={Colors.blue30}
           iconSource={Assets.icons.plusSmall} />
         <TextField
-          style={[styles.fields, { width: 0.4 * width }]}
+          style={[styles.fields, { marginBottom: 20, width: 0.4 * width }]}
           onChangeText={(text) => setName(text)}
           value={name}
           placeholder={'Your Name'}
@@ -167,18 +194,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 30,
+    marginTop: 25,
     width: width
   },
   container_1: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 10,
     width: width
   },
   container_2: {
-    marginVertical: 10,
     flexDirection:"row",
     width: width
   },
@@ -189,20 +213,11 @@ const styles = StyleSheet.create({
   },
   fields: {
     fontSize: 20, 
-    marginBottom: 6, 
     borderBottomWidth: 1,
-    borderBottomColor: Colors.grey40,
+    borderColor: Colors.$outlineDisabledHeavy,
+    height: 35,
+    paddingBottom: 4,
+    marginBottom: 4, 
     marginLeft: '2.5%', 
-    width: '90%',
-  },
-  inputsContainer: {
-    flex: 1, marginBottom: 20
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgray"
   }
 });

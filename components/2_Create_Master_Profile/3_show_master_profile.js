@@ -31,15 +31,17 @@ export default function MasterProfileHome({ navigation }) {
         if (profile !== null) {
           temp = [];
           for (let key in profile) {
-            if (key == 'profile_pic') {
+            if (key == 'Image') {
               setImage(profile[key]);
             } else if (key == 'Name') {
               setName(profile[key]);
             } else {
-              temp.push({
-                caption: key,
-                value: profile[key],
-              });
+              for (let i in profile[key]) {
+                temp.push({
+                  caption: key,
+                  value: profile[key][i]
+                });
+              }
             }
           }
           setProfileData(temp);
@@ -93,7 +95,7 @@ export default function MasterProfileHome({ navigation }) {
           }}
         >
           <View style={styles.buttonView}>
-            {/* <Button
+            <Button
               size={"large"}
               style={{ padding: 15 }}
               borderRadius={10}
@@ -101,7 +103,7 @@ export default function MasterProfileHome({ navigation }) {
               iconSource={require("../../assets/edit.png")}
               iconStyle={styles.icon}
               onPress={() => navigation.goBack()}
-            /> */}
+            />
             <Button
               size={"large"}
               style={{ padding: 15 }}

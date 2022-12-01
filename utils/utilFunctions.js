@@ -22,7 +22,14 @@ export function DeepEquals(object1, object2) {
     }
     return true;
 }
-  
+
+export function ArrayDeepEquals(a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => DeepEquals(val, b[index]));
+}
+
 function isObject(object) {
     return object != null && typeof object === 'object';
 }

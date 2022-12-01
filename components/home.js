@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { View, Card, Button, Text, GridList, Colors, LoaderScreen, Spacings, Assets } from 'react-native-ui-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ArrayEquals, DeepEquals } from '../utils/utilFunctions';
+import { ArrayEquals, ArrayDeepEquals, DeepEquals } from '../utils/utilFunctions';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -14,9 +14,9 @@ export default function HomePage({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [cardData, setCardData] = useState([]);
   const [value, setValue] = useState(0);
+  const [autofill, setAutofill] = useState([]);
+  const [master, setMaster] = useState({});
 
-  const [masterKeys, setMasterKeys] = useState([]);
-  const [masters, setMasters] = useState([]);
   function useForceUpdate() {
     setValue(value => value + 1);
   }
@@ -27,14 +27,6 @@ export default function HomePage({ navigation }) {
       let keys = [];
       try {
         keys = await AsyncStorage.getAllKeys();
-        console.log("=======home========")
-        console.log(keys)
-        if (keys !== []){
-          if (!ArrayEquals(keys, masterKeys)) {
-            setMasterKeys([keys[keys.findIndex(element => element === '@master')]])
-          }
-        }
-        console.log('masters keys', masterKeys)
         if (keys !== []) {
           keys.splice(keys.findIndex(element => element === '@master'), 1);
           if (!ArrayEquals(keys, profileKeys)) {
@@ -45,23 +37,6 @@ export default function HomePage({ navigation }) {
       } catch (error) {
         // Any needed logic for failure
       }
-      if (masterKeys.length !== 0) {
-        try {
-          const profileArr = await AsyncStorage.multiGet(masterKeys);
-          let temp = {};
-          for (let i = 0; i < profileArr.length; i++) {
-            let curr_key = profileArr[i][0];
-            let curr_val = JSON.parse(profileArr[i][1]);
-            temp[curr_key] = curr_val;
-          }
-          if (!DeepEquals(temp, masters)) {
-            setMasters(temp);
-          }
-        } catch (error) {
-          // Any needed logic for failure
-        }
-      }
-      console.log('masters: ', masters);
       if (profileKeys.length !== 0) {
         try {
           const profileArr = await AsyncStorage.multiGet(profileKeys);
@@ -89,11 +64,27 @@ export default function HomePage({ navigation }) {
         })
       }
       setCardData(cards);
-      // console.log(cardData);
+    }
+    async function getMaster() {
+      const jsonValue = await AsyncStorage.getItem('@master');
+      const masterObj = jsonValue != null ? JSON.parse(jsonValue) : null;
+      if (masterObj !== null && !DeepEquals(masterObj, master)) {
+        setMaster(masterObj);
+        const keys = Object.keys(masterObj);
+        keys.splice(0, 2);
+        var options = []
+        for (let i in keys) {
+          options.push({ key: i, label: keys[i], value: keys[i] })
+        }
+        if (!ArrayDeepEquals(options, autofill)) {
+          setAutofill(options);
+        }
+      }
     }
     getProfileKeys();
+    getMaster();
     setLoading(false);
-  }, [profileKeys, profiles, value]);
+  }, [profileKeys, profiles, value, master]);
 
   if (isLoading) {
     return(
@@ -142,7 +133,8 @@ export default function HomePage({ navigation }) {
             iconSource={Assets.icons.plusSmall}
             onPress={() => navigation.navigate('Create', {
               forceUpdate: useForceUpdate,
-              master: masters
+              master: master,
+              autofill: autofill
             })}
             style={styles.button}
             label={'Create'} />

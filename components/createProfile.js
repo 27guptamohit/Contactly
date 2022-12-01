@@ -1,94 +1,35 @@
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect, useRef } from "react";
 import { StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Avatar, View, Button, Colors, Assets, Incubator, ColorName, Picker } from "react-native-ui-lib";
+import { Avatar, View, Button, Icon, Colors, Assets, Incubator, Picker } from "react-native-ui-lib";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const { TextField } = Incubator;
 
+const { TextField } = Incubator;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
+const dropdown = require('../assets/chevron.png');
+const dropdownIcon = <Icon 
+  source={dropdown} 
+  style={{ 
+    resizeMode: 'contain', 
+    height: 20, 
+    width: 20,
+   }} 
+  tintColor={Colors.$iconDefault}/>;
 
 export default function CreateProfile({ route, navigation }) {
-  const { forceUpdate, master } = route.params;
+  const { forceUpdate, master, autofill } = route.params;
+  const [image, setImage] = useState(master['Image']);
+  const [name, setName] = useState(master['Name']);
   const [icon, setIcon] = useState('');
   const [title, setTitle] = useState('');
-
-  const [titleValue, setTitleValue] = useState('');
+  
+  const [titleValue, setTitleValue] = useState(autofill[0]['value']);
   const [valValue, setValValue] = useState('');
   const [numInputs, setNumInputs] = useState(1);
   const refInputs = useRef([{key: titleValue, value: valValue}]);
-
-
-
-
-// new variables
-//////////////////////////////////////////////////////////////////////////////////////////////
-  const [titleValue_1, setTitleValue_1] = useState('');
-  const [valValue_1, setValValue_1] = useState('');
-  const [numInputs_1, setNumInputs_1] = useState(1);
-  const refInputs_1 = useRef([{key: titleValue_1, value: valValue_1}]);
-
-  const addHandler_1 = () => {
-    refInputs_1.current.push([{key: '', value: ''}]);
-    setNumInputs_1(value => value + 1);
-  }
-
-  const deleteHandler_1 = (index) => {
-    refInputs_1.current.splice(index, 1)[0];
-    setNumInputs_1(value => value - 1);
-  }
-
-  const inputTitleHandler_1 = (index, value) => {
-    refInputs_1.current[index]['key'] = value.label;
-    setTitleValue_1(value.label);
-  }
-
-  const inputValueHandler_1 = (index, value) => {
-    refInputs_1.current[index]['value'] = value.label;
-    setValValue_1(value.label);
-  }
-
-  async function saveProfile_1() {
-    console.log(title, icon);
-    const currProfile = {'title': title, 'icon': icon};
-    for (let i = 0; i < numInputs_1; i++) {
-      currProfile[refInputs_1.current[i]['key']] = refInputs_1.current[i]['value'];
-    }
-    console.log(currProfile);
-    let key = '@profile';
-    if (title !== null) {
-      key = '@' + title.toLowerCase().replace(/\s/g, '');
-    }
-    console.log(key);
-    try {
-      await AsyncStorage.setItem(key, JSON.stringify(currProfile))
-      console.log('Done');
-    } catch (e) {
-      console.log(e);
-      // saving error
-    }
-    forceUpdate();
-    navigate();
-  }
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-  console.log("===========Create profile===============")
-  // console.log(master)
-  let mastersArray = [];
-  for (let key in master["@master"]) {
-    // console.log('key:', key, "  value:", master["@master"][key]);
-    if (key != "profile_pic"){
-      mastersArray.push({"fieldName": key, "fieldValue": master["@master"][key]})
-    }
-  }
-  console.log("mastersArray = ", mastersArray)
 
   useEffect(() => {
     async function fetchData() {
@@ -97,24 +38,24 @@ export default function CreateProfile({ route, navigation }) {
         alert('Permission denied!')
       }
     }
-    fetchData()
+    fetchData();
   }, [])
 
-  // const PickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [1,1],
-  //     quality: 1
-  //   })
+  const PickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1
+    })
 
-  //   if (!result.cancelled){
-  //     setImage(result.uri)
-  //   }
-  // }
+    if (!result.cancelled){
+      setImage(result.uri)
+    }
+  }
 
   const addHandler = () => {
-    refInputs.current.push([{key: '', value: ''}]);
+    refInputs.current.push({key: autofill[0]['value'], value: ''});
     setNumInputs(value => value + 1);
   }
 
@@ -138,22 +79,17 @@ export default function CreateProfile({ route, navigation }) {
   }
 
   async function saveProfile() {
-    console.log(title, icon);
     const currProfile = {'title': title, 'icon': icon};
     for (let i = 0; i < numInputs; i++) {
       currProfile[refInputs.current[i]['key']] = refInputs.current[i]['value'];
     }
-    console.log(currProfile);
     let key = '@profile';
     if (title !== null) {
       key = '@' + title.toLowerCase().replace(/\s/g, '');
     }
-    console.log(key);
     try {
       await AsyncStorage.setItem(key, JSON.stringify(currProfile))
-      console.log('Done');
     } catch (e) {
-      console.log(e);
       // saving error
     }
     forceUpdate();
@@ -166,24 +102,37 @@ export default function CreateProfile({ route, navigation }) {
     inputs.push(
       <View key={i} style={styles.container_2}>
         <View style={{ flex: 1, flexDirection: 'row', width: '90%', justifyContent: 'center' }}>
-          <TextField
-            style={[styles.fields, { width: width / 4 }]}
-            onChangeText={(text) => inputTitleHandler(i, text)}
+          <Picker
+            placeholder={'Option'}
+            onChange={item => inputTitleHandler(i, item.value)}
             value={refInputs.current[i]['key']}
-            placeholder={'Title'}
-            autoCapitalize={'none'}
-          />
-          <TextField
-            style={[styles.fields, { marginHorizontal: 10, width: width / 2 }]}
-            onChangeText={(text) => inputValueHandler(i, text)}
-            value={refInputs.current[i]['value']}
-            placeholder={'Value'}
-            autoCapitalize={'none'}
-          />
+            style={{ fontSize: 20, }}
+            containerStyle={[{ paddingTop: 4, borderBottomWidth: 1,
+              borderColor: Colors.$outlineDisabledHeavy,
+              height: 35, width: width * 0.3 }]}
+            trailingAccessory={dropdownIcon}
+            migrateTextField
+            useSafeArea
+          >
+            {autofill.map(option => (
+              <Picker.Item key={option.key} value={option.value} label={option.label}/>
+            ))}
+          </Picker>
+          <Picker
+            placeholder={refInputs.current[i]['value']}
+            placeholderTextColor={Colors.$textDefault}
+            onChange={(item) => inputValueHandler(i, item.value)}
+            style={[styles.fields, {marginHorizontal: 10, width: width / 2 }]}
+            migrateTextField
+            useSafeArea
+          >
+            { master[refInputs.current[i]['key']] ? master[refInputs.current[i]['key']].map(option => (
+              <Picker.Item key={option} value={option} label={option}/>
+            )) : null }
+          </Picker>
           <Button 
-            size={'small'}
-            borderRadius={15}
-            backgroundColor={Colors.transparent}
+            backgroundColor={Colors.$backgroundPrimaryLight}
+            style={{ height: 30, width: 30 }}
             color={Colors.grey10}
             iconSource={require('../assets/close.png')}
             iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
@@ -192,69 +141,6 @@ export default function CreateProfile({ route, navigation }) {
       </View>
     )
   }
-
-
-// new version
-////////////////////////////////////////////////////////////////////////////////////////////////  
-  var inputs_1 = []
-
-  for (let i = 0; i < numInputs_1; i++) {
-    inputs_1.push(
-      <View key={i} style={styles.container_4}>
-        <View style={{ flex: 1, flexDirection: 'row', width: '90%', justifyContent: 'center' }}>
-          <Picker
-            placeholder={"Field"}
-            // floatingPlaceholder
-            value={refInputs_1.current[i]['key']}
-            enableModalBlur={false}
-            onChange={item => inputTitleHandler_1(i,item)}
-            topBarProps={{title: 'Fields'}}
-            style={[styles.fields, { width: width / 4 }]}
-            showSearch
-            searchPlaceholder={'Search a field'}
-            searchStyle={{color: Colors.blue30, placeholderTextColor: Colors.grey50}}
-            // onSearchChange={value => console.warn('value', value)}
-            migrateTextField
-          >
-            {mastersArray.map(option => (
-              <Picker.Item 
-                key={option.fieldName} value={option.fieldName} label={option.fieldName} 
-              />
-            ))}
-          </Picker>
-          <Picker
-            placeholder={"Value"}
-            // floatingPlaceholder
-            value={refInputs_1.current[i]['value']}
-            enableModalBlur={false}
-            onChange={item => inputValueHandler_1(i,item)}
-            topBarProps={{title: 'Values'}}
-            style={[styles.fields, { marginHorizontal: 10, width: width / 2 }]}
-            showSearch
-            searchPlaceholder={'Search a value'}
-            searchStyle={{color: Colors.blue30, placeholderTextColor: Colors.grey50}}
-            // onSearchChange={value => console.warn('value', value)}
-            migrateTextField
-          >
-            {mastersArray.map(option => (
-              <Picker.Item 
-                key={option.fieldValue} value={option.fieldValue} label={option.fieldValue} 
-              />
-            ))}
-          </Picker>  
-          <Button 
-            size={'small'}
-            borderRadius={15}
-            backgroundColor={Colors.transparent}
-            color={Colors.grey10}
-            iconSource={require('../assets/close.png')}
-            iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
-            onPress={() => deleteHandler_1(i)} />
-        </View>
-      </View>
-    )
-  }
-////////////////////////////////////////////////////////////////////////////////////////////////  
 
   return (
     <View style={styles.container_main}>
@@ -267,7 +153,7 @@ export default function CreateProfile({ route, navigation }) {
           style={[styles.textinput, { marginRight: 5 }]}>
         </TextField>
         <TextField
-          style={[styles.textinput, { minWidth: width-250 }]}
+          style={[styles.textinput, { minWidth: width-175 }]}
           onChangeText={(value) => setTitle(value)}
           defaultValue={title}
           placeholder={'Profile Name'}
@@ -275,31 +161,26 @@ export default function CreateProfile({ route, navigation }) {
         />
       </View> 
       <View style={{ alignItems: 'center', justifyContent: 'center' }} >
-        <View style={{ maxHeight: 0.45 * height }} >
-          <ScrollView>{inputs_1}</ScrollView>
-        </View>
-        {/* <Avatar 
-          source={image ? { uri: image } : require('../../assets/placeholder.png')} 
-          size={120} 
+        <Avatar 
+          source={image ? { uri: image } : require('../assets/placeholder.png')} 
+          size={100} 
           style={{ marginBottom: 10 }} />
-        <Button label="Choose Profile Image"
+        <Button label={image ? "Edit" : "Choose Image"}
           onPress={PickImage}
           backgroundColor={Colors.transparent}
           color={Colors.blue30}
           iconSource={Assets.icons.plusSmall} />
         <TextField
-          style={[styles.fields, { width: 0.4 * width }]}
+          style={[styles.fields, { marginBottom: 20, width: 0.4 * width }]}
           onChangeText={(text) => setName(text)}
           value={name}
           placeholder={'Your Name'}
           autoCapitalize={'none'}
           textAlign={'center'}
-          /> */}
-
-        {/* <View style={{ maxHeight: 0.45 * height }} >
+          />
+        <View style={{ maxHeight: 0.35 * height }} >
           <ScrollView>{inputs}</ScrollView>
-        </View> */}
-
+        </View>
       </View>
       <View style={[styles.container_1, { flex: 1, alignItems: 'center', justifyContent: 'flex-end' }]}>
         <Button 
@@ -310,7 +191,7 @@ export default function CreateProfile({ route, navigation }) {
           iconSource={Assets.icons.plusSmall}
           style={{ marginBottom: 20 }}
           label={'Add Field'}
-          onPress={addHandler_1} />
+          onPress={addHandler} />
         <Button 
           size={'large'}
           borderRadius={10}
@@ -319,7 +200,7 @@ export default function CreateProfile({ route, navigation }) {
           label={'Save'}
           style={{ marginBottom: 35}}
           onPress={() => {
-            saveProfile_1();
+            saveProfile();
           }} />
       </View>
       <StatusBar style="auto" />
@@ -332,18 +213,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 30,
+    marginTop: 10,
     width: width
   },
   container_1: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 10,
     width: width
   },
   container_2: {
-    marginVertical: 10,
     flexDirection:"row",
     width: width
   },
@@ -352,35 +230,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: '25%',
   },
-  container_4: {
-    marginVertical: 0.8,
-    flexDirection:"row",
-    width: width
-  },
   fields: {
     fontSize: 20, 
-    marginBottom: 6, 
     borderBottomWidth: 1,
-    borderBottomColor: Colors.grey40,
+    borderColor: Colors.$outlineDisabledHeavy,
+    height: 35,
+    paddingBottom: 4,
     marginLeft: '2.5%', 
-    width: '90%',
-  },
-  inputsContainer: {
-    flex: 1, 
-    marginBottom: 20
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgray"
   },
   textinput: {
-    fontSize: 35,
+    fontSize: 25,
     marginVertical: 25,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.grey40
+    borderColor: Colors.$outlineDisabledHeavy,
+    paddingBottom: 4,
   }
 });

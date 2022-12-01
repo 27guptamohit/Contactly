@@ -1,0 +1,15 @@
+export const FIELDS = [ 
+    { key: 0, label: 'Email', value: 'Email' }, 
+    { key: 1, label: 'Phone', value: 'Phone' }, 
+    { key: 2, label: 'Company', value: 'Company' }, 
+    { key: 3, label: 'Birthday', value: 'Birthday' },
+    { key: 4, label: 'Website', value: 'Website' }, 
+    { key: 5, label: 'WhatsApp', value: 'WhatsApp' }, 
+    { key: 6, label: 'WeChat', value: 'WeChat' },
+    { key: 7, label: 'LinkedIn', value: 'LinkedIn' }, 
+    { key: 8, label: 'Facebook', value: 'Facebook' }, 
+    { key: 9, label: 'Instagram', value: 'Instagram' }, 
+    { key: 10, label: 'Snapchat', value: 'Snapchat' }, 
+    { key: 11, label: 'TikTok', value: 'TikTok' }, 
+    { key: 12, label: 'BeReal', value: 'BeReal' }, 
+    { key: 13, label: 'GitHub', value: 'GitHub' }];
