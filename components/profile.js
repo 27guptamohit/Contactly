@@ -37,7 +37,7 @@ export default function ProfilePage({ route, navigation }) {
   };
   const toggleOff = () => {
     setVisible(false);
-  }
+  };
   getProfileAttributes(profile);
   return (
     <View style={styles.container}>
@@ -83,10 +83,12 @@ export default function ProfilePage({ route, navigation }) {
             backgroundColor={Colors.grey50}
             iconSource={require("../assets/edit.png")}
             iconStyle={styles.icon}
-            onPress={() => navigation.navigate('EditProfile', {
-              itemId: itemId,
-              profile: profile
-            })}
+            onPress={() =>
+              navigation.navigate("EditProfile", {
+                itemId: itemId,
+                profile: profile,
+              })
+            }
           />
           <Button
             size={"large"}
@@ -105,6 +107,7 @@ export default function ProfilePage({ route, navigation }) {
           visible: visible,
           panDirection: PanningProvider.Directions.DOWN,
           toggleOff: toggleOff,
+          profile: profile,
         }}
       ></ShareContact>
     </View>
