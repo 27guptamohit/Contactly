@@ -4,9 +4,9 @@ import { StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Avatar, View, Button, Colors, Icon, Assets, Incubator, Picker } from "react-native-ui-lib";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FIELDS } from '../../utils/constants';
+import { FIELDS, CONTACT_KEYS } from '../../utils/constants';
 
-const { TextField, WheelPicker } = Incubator;
+const { TextField } = Incubator;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -21,14 +21,15 @@ const dropdownIcon = <Icon
   tintColor={Colors.$iconDefault}/>;
 
 export default function EditMasterProfile({ route, navigation }) {
-  const { setHasMaster } = route.params
-  const [image, setImage] = useState(null);
-  const [name, setName] = useState('');
+  const { currentMaster, initialRef, setHasMaster } = route.params
+  const [image, setImage] = useState(currentMaster ? currentMaster['photo'] : null);
+  const [firstName, setFirstName] = useState(currentMaster ? currentMaster['firstName'] : '');
+  const [name, setName] = useState(currentMaster ? currentMaster['lastName'] : '');
 
-  const [titleValue, setTitleValue] = useState(FIELDS[0]['value']);
+  const [titleValue, setTitleValue] = useState('');
   const [valValue, setValValue] = useState('');
-  const [numInputs, setNumInputs] = useState(1);
-  const refInputs = useRef([{key: titleValue, value: valValue}]);
+  const [numInputs, setNumInputs] = useState(initialRef.length);
+  const refInputs = useRef(initialRef);
 
   useEffect(() => {
     async function fetchData() {
@@ -37,7 +38,7 @@ export default function EditMasterProfile({ route, navigation }) {
         alert('Permission denied!')
       }
     }
-    fetchData()
+    fetchData();
   }, [])
 
   const PickImage = async () => {
@@ -54,7 +55,7 @@ export default function EditMasterProfile({ route, navigation }) {
   }
 
   const addHandler = () => {
-    refInputs.current.push({key: FIELDS[0]['value'], value: ''});
+    refInputs.current.push({key: '', value: ''});
     setNumInputs(value => value + 1);
   }
 
@@ -66,7 +67,6 @@ export default function EditMasterProfile({ route, navigation }) {
   const inputTitleHandler = (index, value) => {
     refInputs.current[index]['key'] = value;
     setTitleValue(value);
-    console.log(refInputs.current);
   }
 
   const inputValueHandler = (index, value) => {
@@ -74,17 +74,18 @@ export default function EditMasterProfile({ route, navigation }) {
     setValValue(value);
   }
 
+  const navigate = () => {
+    navigation.goBack();
+  }
+
   async function saveMasterProfile() {
-    const masterProfile = {'Image': image, 'Name': name};
+    const masterProfile = { 'photo': image, 'firstName': firstName, 'lastName': name };
     if (numInputs > 0) {
       for (let i = 0; i < numInputs; i++) {
-        if (refInputs.current[i]['key'] in masterProfile) {
-          masterProfile[refInputs.current[i]['key']].push(refInputs.current[i]['value']);
-        } else {
-          masterProfile[refInputs.current[i]['key']] = [refInputs.current[i]['value']];
+        if (refInputs.current[i]['value'] !== "") {
+          masterProfile[refInputs.current[i]['key']] = refInputs.current[i]['value'];
         }
       }
-      console.log(JSON.stringify(masterProfile));
       try {
         await AsyncStorage.setItem('@master', JSON.stringify(masterProfile))
       } catch (e) {
@@ -92,9 +93,10 @@ export default function EditMasterProfile({ route, navigation }) {
       }
       if (setHasMaster !== null) {
         setHasMaster();
+      } else {
+        navigate();
       }
     }
-    // navigate();
   }
 
   var inputs = []
@@ -102,14 +104,20 @@ export default function EditMasterProfile({ route, navigation }) {
   for (let i = 0; i < numInputs; i++) {
     inputs.push(
       <View key={i} style={styles.container_2}>
-        <View style={{ flex: 1, flexDirection: 'row', width: '90%', justifyContent: 'center' }}>
+        <View style={{ width: '90%', justifyContent: 'center', marginHorizontal: 20 }}>
           <Picker
             onChange={item => inputTitleHandler(i, item.value)}
-            value={refInputs.current[i]['key']}
-            style={{ fontSize: 20, }}
-            containerStyle={[{ paddingTop: 4, borderBottomWidth: 1,
-              borderColor: Colors.$outlineDisabledHeavy,
-              height: 35, width: width * 0.3 }]}
+            placeholder={CONTACT_KEYS[refInputs.current[i]['key']]}
+            placeholderTextColor={Colors.$textDefault}
+            style={{ fontSize: 15, }}
+            containerStyle={[{ 
+              padding: 2,
+              height: 25, 
+              width: width * 0.3,
+              borderWidth: 1,
+              borderRadius: 7,
+              borderColor: Colors.$textDisabled
+            }]}
             trailingAccessory={dropdownIcon}
             migrateTextField
             useSafeArea
@@ -120,20 +128,22 @@ export default function EditMasterProfile({ route, navigation }) {
               />
             ))}
           </Picker>
-          <TextField
-            style={[styles.fields, { marginLeft: 10, marginRight: 5, width: width / 2 }]}
-            onChangeText={(text) => inputValueHandler(i, text)}
-            value={refInputs.current[i]['value']}
-            autoCapitalize={'none'}
-            autoCorrect={false}
-          />
-          <Button 
-            backgroundColor={Colors.$backgroundPrimaryLight}
-            style={{ height: 30, width: 30 }}
-            color={Colors.grey10}
-            iconSource={require('../../assets/close.png')}
-            iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
-            onPress={() => deleteHandler(i)} />
+          <View style={{ flex: 1, flexDirection: 'row', width: width, marginBottom: 5, justifyContent: 'flex-start' }}>
+            <TextField
+              style={[styles.fields, { marginVertical: 5, marginRight: 7, width: width * 0.82 }]}
+              onChangeText={(text) => inputValueHandler(i, text)}
+              value={refInputs.current[i]['value']}
+              autoCapitalize={'none'}
+              autoCorrect={false}
+            />
+            <Button 
+              backgroundColor={Colors.$backgroundPrimaryLight}
+              style={{ height: 30, width: 30 }}
+              color={Colors.grey10}
+              iconSource={require('../../assets/close.png')}
+              iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
+              onPress={() => deleteHandler(i)} />
+          </View>
         </View>
       </View>
     )
@@ -151,15 +161,23 @@ export default function EditMasterProfile({ route, navigation }) {
           backgroundColor={Colors.transparent}
           color={Colors.blue30}
           iconSource={Assets.icons.plusSmall} />
-        <TextField
-          style={[styles.fields, { marginBottom: 20, width: 0.4 * width }]}
-          onChangeText={(text) => setName(text)}
-          value={name}
-          placeholder={'Your Name'}
-          autoCapitalize={'none'}
-          textAlign={'center'}
-          />
-        <View style={{ maxHeight: 0.45 * height }} >
+        <View style={{ flexDirection: 'row', justifyContent: 'center', width: width }}>
+          <TextField
+            style={[styles.fields, { marginRight: 5, width: 0.3 * width }]}
+            onChangeText={(text) => setFirstName(text)}
+            value={firstName}
+            placeholder={'First'}
+            autoCapitalize={'none'}
+            />
+          <TextField
+            style={[styles.fields, { marginBottom: 20, width: 0.45 * width }]}
+            onChangeText={(text) => setName(text)}
+            value={name}
+            placeholder={'Last'}
+            autoCapitalize={'none'}
+            />
+        </View>
+        <View style={{ maxHeight: 0.41 * height }} >
           <ScrollView>{inputs}</ScrollView>
         </View>
       </View>
@@ -215,9 +233,6 @@ const styles = StyleSheet.create({
     fontSize: 20, 
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDisabledHeavy,
-    height: 35,
     paddingBottom: 4,
-    marginBottom: 4, 
-    marginLeft: '2.5%', 
   }
 });

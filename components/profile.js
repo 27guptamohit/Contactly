@@ -11,7 +11,10 @@ import {
   PanningProvider,
 } from "react-native-ui-lib";
 import { useState } from "react";
+import { CONTACT_KEYS } from "../utils/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShareContact from "./shareDialog";
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -20,9 +23,9 @@ var profileData = [];
 function getProfileAttributes(profile) {
   profileData = [];
   for (let key in profile) {
-    if (key != "title" && (key != "icon") & (key != "Name")) {
+    if (key != "profileName" && key != "icon" && key != "firstName" && key != "lastName" && key != "photo") {
       profileData.push({
-        caption: key,
+        key: key,
         value: profile[key],
       });
     }
@@ -30,8 +33,9 @@ function getProfileAttributes(profile) {
 }
 
 export default function ProfilePage({ route, navigation }) {
-  const { itemId, profile } = route.params;
+  const { itemId, profile, forceUpdate } = route.params;
   const [visible, setVisible] = useState(false);
+
   const toggleDialog = () => {
     setVisible(!visible);
   };
@@ -39,16 +43,34 @@ export default function ProfilePage({ route, navigation }) {
     setVisible(false);
   }
   getProfileAttributes(profile);
+  
+  const navigate = () => {
+    navigation.goBack();
+  }
+
+  async function deleteProfile() {
+    try {
+      await AsyncStorage.removeItem(itemId);
+    } catch(e) {
+      // remove error
+    }
+    forceUpdate();
+    navigate();
+  }  
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 40, marginVertical: 25 }}>
-        {profile.icon + " " + profile.title}
+        {profile.icon + " " + profile.profileName}
       </Text>
-      {/* <Avatar
-        source={require("../assets/placeholder.png")}
-        size={120}
-      />
-      <Text style={{ fontSize: 18, marginVertical: 5 }}>{profile.Name}</Text> */}
+      <Avatar 
+          source={profile.photo ? { uri: profile.photo } : require('../assets/placeholder.png')} 
+          size={120} 
+          style={{ marginBottom: 10 }} />
+        { profile.firstName ? 
+          (profile.lastName ? (<Text style={{ fontSize: 22, marginTop: 18 }}>{profile.firstName + ' ' + profile.lastName}</Text>) 
+            : <Text style={{ fontSize: 20, marginVertical: 10 }}>{profile.firstName}</Text>) 
+            : null }
       <GridList
         data={profileData}
         containerWidth={width}
@@ -60,7 +82,7 @@ export default function ProfilePage({ route, navigation }) {
             <Text
               style={{ fontSize: 15, marginBottom: 2, color: Colors.grey20 }}
             >
-              {item.caption}
+              {CONTACT_KEYS[item.key]}
             </Text>
             <Text style={{ fontSize: 18, marginBottom: 6 }}>{item.value}</Text>
           </View>
@@ -96,6 +118,15 @@ export default function ProfilePage({ route, navigation }) {
             iconSource={require("../assets/share.png")}
             iconStyle={styles.icon}
             onPress={toggleDialog}
+          />
+          <Button
+            size={"large"}
+            style={{ padding: 15 }}
+            borderRadius={10}
+            backgroundColor={Colors.grey50}
+            iconSource={require("../assets/trash.png")}
+            iconStyle={styles.icon}
+            onPress={deleteProfile}
           />
         </View>
       </View>

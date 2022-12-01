@@ -4,6 +4,7 @@ import { StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { View, Card, Button, Text, GridList, Colors, LoaderScreen, Spacings, Assets } from 'react-native-ui-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ArrayEquals, ArrayDeepEquals, DeepEquals } from '../utils/utilFunctions';
+import { CONTACT_KEYS } from '../utils/constants';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -37,7 +38,7 @@ export default function HomePage({ navigation }) {
       } catch (error) {
         // Any needed logic for failure
       }
-      if (profileKeys.length !== 0) {
+      if (profileKeys.length > 0) {
         try {
           const profileArr = await AsyncStorage.multiGet(profileKeys);
           let temp = {};
@@ -52,6 +53,10 @@ export default function HomePage({ navigation }) {
         } catch (error) {
           // Any needed logic for failure
         }
+      } else {
+        if (!DeepEquals([], profiles)) {
+          setProfiles([]);
+        }
       }
       let cards = [];
       console.log('profiles', profiles);
@@ -59,32 +64,32 @@ export default function HomePage({ navigation }) {
         console.log('key', key);
         cards.push({
           key: key,
-          title: profiles[key]?.title,
+          profileName: profiles[key]?.profileName,
           icon: profiles[key]?.icon,
         })
       }
-      setCardData(cards);
+      if (!ArrayDeepEquals(cards, cardData)) {
+        setCardData(cards);
+      }
     }
     async function getMaster() {
       const jsonValue = await AsyncStorage.getItem('@master');
       const masterObj = jsonValue != null ? JSON.parse(jsonValue) : null;
       if (masterObj !== null && !DeepEquals(masterObj, master)) {
         setMaster(masterObj);
-        const keys = Object.keys(masterObj);
-        keys.splice(0, 2);
-        var options = []
-        for (let i in keys) {
-          options.push({ key: i, label: keys[i], value: keys[i] })
-        }
-        if (!ArrayDeepEquals(options, autofill)) {
-          setAutofill(options);
-        }
+      }
+      var keys = Object.keys(masterObj);
+      keys.splice(0, 3);
+      var transformed = keys.map(element => ({ key: element, label: CONTACT_KEYS[element], value: element }));
+      if (!ArrayDeepEquals(transformed, autofill)) {
+        setAutofill(transformed);
       }
     }
     getProfileKeys();
     getMaster();
     setLoading(false);
-  }, [profileKeys, profiles, value, master]);
+    console.log("autofill", autofill);
+  }, [profileKeys, cardData, profiles, value, master, autofill]);
 
   if (isLoading) {
     return(
@@ -103,7 +108,7 @@ export default function HomePage({ navigation }) {
                 fontSize: 20, 
                 alignItems: 'center', 
                 justifyContent: 'center' 
-              }}>Make Your First Profile</Text>) : null}
+              }}>Make a Profile</Text>) : null}
           <View style={styles.gridList} >
             <GridList
               data={cardData}
@@ -116,10 +121,11 @@ export default function HomePage({ navigation }) {
                   style={styles.card} 
                   onPress={() => navigation.navigate('Profile', {
                     itemId: item.key,
-                    profile: profiles[item.key]
+                    profile: profiles[item.key],
+                    forceUpdate: useForceUpdate
                   })}
                 >
-                  <Text style={{fontSize: 18}}>{item.title}</Text>
+                  <Text style={{fontSize: 18}}>{item.profileName}</Text>
                   <Text style={{fontSize: 50}}>{item.icon}</Text>
                 </Card>
               )}
@@ -134,7 +140,8 @@ export default function HomePage({ navigation }) {
             onPress={() => navigation.navigate('Create', {
               forceUpdate: useForceUpdate,
               master: master,
-              autofill: autofill
+              autofill: autofill,
+              profile: null
             })}
             style={styles.button}
             label={'Create'} />

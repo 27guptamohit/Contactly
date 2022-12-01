@@ -13,12 +13,17 @@ import {
   Assets,
 } from "react-native-ui-lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CONTACT_KEYS } from "../../utils/constants";
+import { ArrayDeepEquals, DeepEquals } from "../../utils/utilFunctions";
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export default function MasterProfileHome({ navigation }) {
   const [image, setImage] = useState(null);
-  const [name, setName] = useState(null);
+  const [firstName, setFirstName] = useState('');
+  const [name, setName] = useState('');
+  const [master, setMaster] = useState('');
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
@@ -31,20 +36,21 @@ export default function MasterProfileHome({ navigation }) {
         if (profile !== null) {
           temp = [];
           for (let key in profile) {
-            if (key == 'Image') {
+            if (key == 'photo') {
               setImage(profile[key]);
-            } else if (key == 'Name') {
+            } else if (key == 'firstName') {
+              setFirstName(profile[key]);
+            } else if (key == 'lastName') {
               setName(profile[key]);
             } else {
-              for (let i in profile[key]) {
-                temp.push({
-                  caption: key,
-                  value: profile[key][i]
-                });
-              }
+              temp.push({
+                key: key,
+                value: profile[key]
+              });
             }
           }
           setProfileData(temp);
+          setMaster(profile);
         }
       } catch (error) {
         // Any needed logic for failure
@@ -67,7 +73,10 @@ export default function MasterProfileHome({ navigation }) {
           source={image ? { uri: image } : require('../../assets/placeholder.png')} 
           size={120} 
           style={{ marginBottom: 10 }} />
-        { name ? (<Text style={{ fontSize: 18, marginVertical: 10 }}>{name}</Text>) : null }
+        { firstName ? 
+          (name ? (<Text style={{ fontSize: 20, marginVertical: 10 }}>{firstName + ' ' + name}</Text>) 
+            : <Text style={{ fontSize: 20, marginVertical: 10 }}>{firstName}</Text>) 
+            : null }
         <GridList
           data={profileData}
           containerWidth={width}
@@ -79,7 +88,7 @@ export default function MasterProfileHome({ navigation }) {
               <Text
                 style={{ fontSize: 15, marginBottom: 2, color: Colors.grey20 }}
               >
-                {item.caption}
+                {CONTACT_KEYS[item.key]}
               </Text>
               <Text style={{ fontSize: 18, marginBottom: 6 }}>{item.value}</Text>
             </View>
@@ -102,7 +111,11 @@ export default function MasterProfileHome({ navigation }) {
               backgroundColor={Colors.grey50}
               iconSource={require("../../assets/edit.png")}
               iconStyle={styles.icon}
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate('EditMasterProfile', {
+                currentMaster: master,
+                initialRef: profileData,
+                setHasMaster: null
+              })}
             />
             <Button
               size={"large"}

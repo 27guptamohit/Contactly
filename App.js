@@ -83,6 +83,12 @@ export default function App() {
               headerShown: false
             }} />
           <Stack.Screen 
+            name="EditMasterProfile" 
+            component={EditMasterProfile}
+            options={{
+              title: 'Edit Master'
+            }} />
+          <Stack.Screen 
             name="Profile" 
             component={ProfilePage} />
           <Stack.Screen 
@@ -101,7 +107,7 @@ export default function App() {
           <Stack.Screen 
             name="EditMaster" 
             component={EditMasterProfile} 
-            initialParams={{ hasMaster: false, setHasMaster: createdMaster }}
+            initialParams={{ currentMaster: null, initialRef: [{key: '', value: ''}], setHasMaster: createdMaster }}
             options={{title: 'Edit'}} />
         </Stack.Navigator>
       )}
