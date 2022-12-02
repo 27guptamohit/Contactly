@@ -3,7 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { View, Card, Button, Text, GridList, Colors, LoaderScreen, Spacings, Assets } from 'react-native-ui-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ArrayEquals, DeepEquals } from '../utils/utilFunctions';
+import { ArrayEquals, ArrayDeepEquals, DeepEquals } from '../utils/utilFunctions';
+import { CONTACT_KEYS } from '../utils/constants';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -14,6 +15,8 @@ export default function HomePage({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [cardData, setCardData] = useState([]);
   const [value, setValue] = useState(0);
+  const [autofill, setAutofill] = useState([]);
+  const [master, setMaster] = useState({});
 
   function useForceUpdate() {
     setValue(value => value + 1);
@@ -30,12 +33,11 @@ export default function HomePage({ navigation }) {
           if (!ArrayEquals(keys, profileKeys)) {
             setProfileKeys(keys);
           }
-          console.log('profile keys', profileKeys);
         }
       } catch (error) {
         // Any needed logic for failure
       }
-      if (profileKeys.length !== 0) {
+      if (profileKeys.length > 0) {
         try {
           const profileArr = await AsyncStorage.multiGet(profileKeys);
           let temp = {};
@@ -50,23 +52,40 @@ export default function HomePage({ navigation }) {
         } catch (error) {
           // Any needed logic for failure
         }
+      } else {
+        if (!DeepEquals([], profiles)) {
+          setProfiles([]);
+        }
       }
       let cards = [];
-      console.log('profiles', profiles);
       for (let key in profiles) {
-        console.log('key', key);
         cards.push({
           key: key,
-          title: profiles[key]?.title,
+          profileName: profiles[key]?.profileName,
           icon: profiles[key]?.icon,
         })
       }
-      setCardData(cards);
-      // console.log(cardData);
+      if (!ArrayDeepEquals(cards, cardData)) {
+        setCardData(cards);
+      }
+    }
+    async function getMaster() {
+      const jsonValue = await AsyncStorage.getItem('@master');
+      const masterObj = jsonValue != null ? JSON.parse(jsonValue) : null;
+      if (masterObj !== null && !DeepEquals(masterObj, master)) {
+        setMaster(masterObj);
+      }
+      var keys = Object.keys(masterObj);
+      keys.splice(0, 3);
+      var transformed = keys.map(element => ({ key: element, label: CONTACT_KEYS[element], value: element }));
+      if (!ArrayDeepEquals(transformed, autofill)) {
+        setAutofill(transformed);
+      }
     }
     getProfileKeys();
+    getMaster();
     setLoading(false);
-  }, [profileKeys, profiles, value]);
+  }, [profileKeys, cardData, profiles, value, master, autofill]);
 
   if (isLoading) {
     return(
@@ -85,7 +104,7 @@ export default function HomePage({ navigation }) {
                 fontSize: 20, 
                 alignItems: 'center', 
                 justifyContent: 'center' 
-              }}>Make Your First Profile</Text>) : null}
+              }}>Make a Profile</Text>) : null}
           <View style={styles.gridList} >
             <GridList
               data={cardData}
@@ -98,10 +117,13 @@ export default function HomePage({ navigation }) {
                   style={styles.card} 
                   onPress={() => navigation.navigate('Profile', {
                     itemId: item.key,
-                    profile: profiles[item.key]
+                    profile: profiles[item.key],
+                    forceUpdate: useForceUpdate,
+                    master: master,
+                    autofill: autofill
                   })}
                 >
-                  <Text style={{fontSize: 18}}>{item.title}</Text>
+                  <Text style={{fontSize: 18}}>{item.profileName}</Text>
                   <Text style={{fontSize: 50}}>{item.icon}</Text>
                 </Card>
               )}
@@ -114,7 +136,11 @@ export default function HomePage({ navigation }) {
             backgroundColor={Colors.grey10}
             iconSource={Assets.icons.plusSmall}
             onPress={() => navigation.navigate('Create', {
-              forceUpdate: useForceUpdate
+              forceUpdate: useForceUpdate,
+              master: master,
+              autofill: autofill,
+              initialRef: [{key: '', value: ''}],
+              currentProfile: null
             })}
             style={styles.button}
             label={'Create'} />
