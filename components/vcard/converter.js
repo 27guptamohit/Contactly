@@ -3,8 +3,9 @@ import formatter from "./formatter";
 
 export function getContactCard(profile) {
   var contactCard = vCard();
-  contactCard.firstName = "Eshaan";
-  contactCard.lastName = "Bhattad";
+  contactCard.formattedName = profile.title;
+  contactCard.socialUrls = profile.Phone
+  console.log(profile)
+  console.log(contactCard);
   return formatter.getFormattedString(contactCard);
 }
-
