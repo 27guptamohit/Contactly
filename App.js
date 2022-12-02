@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HomePage from "./components/home";
 import ProfilePage from './components/profile';
-import EditProfilePage  from "./components/editProfile"
-import CreateProfile from './components/createProfile';
-import CreateMasterButton from "./components/2_Create_Master_Profile/1_create_master_profile_button";
-import EditMasterProfile from "./components/2_Create_Master_Profile/2_edit_master_profile";
-import MasterProfileHome from "./components/2_Create_Master_Profile/3_show_master_profile";
+import CreateAndEditProfile from './components/createAndEditProfile';
+import CreateMasterButton from "./components/masterProfile/createButton";
+import EditMasterProfile from "./components/masterProfile/editMaster";
+import MasterProfileHome from "./components/masterProfile/master";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -42,15 +44,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    async function removeValue() {
-      try {
-        await AsyncStorage.removeItem('@master')
-      } catch(e) {
-        // remove error
-      }
-    
-      console.log('Done.')
-    }
     async function checkMasterProfile() {
       try {
         const value = await AsyncStorage.getItem('@master');
@@ -62,12 +55,19 @@ export default function App() {
         // Any needed logic for failure
       }
     }
-    // removeValue();
     checkMasterProfile();
   }, []);
 
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background:'white'
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       {hasMaster ? (
         <Stack.Navigator>
           <Stack.Screen 
@@ -77,14 +77,22 @@ export default function App() {
               headerShown: false
             }} />
           <Stack.Screen 
+            name="EditMasterProfile" 
+            component={EditMasterProfile}
+            options={{
+              title: 'Edit Master'
+            }} />
+          <Stack.Screen 
             name="Profile" 
             component={ProfilePage} />
           <Stack.Screen 
             name="EditProfile" 
-            component={EditProfilePage} />
+            component={CreateAndEditProfile}
+            options={{title: 'Edit Profile'}} />
           <Stack.Screen
             name="Create"
-            component={CreateProfile}/>
+            component={CreateAndEditProfile}
+            options={{title: 'Create Profile'}}/>
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
@@ -95,7 +103,11 @@ export default function App() {
           <Stack.Screen 
             name="EditMaster" 
             component={EditMasterProfile} 
-            initialParams={{ hasMaster: false, setHasMaster: createdMaster }}
+            initialParams={{ 
+              currentMaster: null, 
+              initialRef: [{key: '', value: ''}], 
+              setHasMaster: createdMaster 
+            }}
             options={{title: 'Edit'}} />
         </Stack.Navigator>
       )}

@@ -1,0 +1,37 @@
+export const FIELDS = [ 
+    { key: 'cellPhone', label: 'Phone', value: 'cellPhone' }, 
+    { key: 'workPhone', label: 'Work Phone', value: 'workPhone' },
+    { key: 'email', label: 'Email', value: 'email' }, 
+    { key: 'workEmail', label: 'Work Email', value: 'workEmail' }, 
+    { key: 'organization', label: 'Company', value: 'organization' }, 
+    { key: 'title', label: 'Title', value: 'title' },
+    { key: 'birthday', label: 'Birthday', value: 'birthday' },
+    { key: 'url', label: 'Website', value: 'url' }, 
+    { key: 'whatsApp', label: 'WhatsApp', value: 'whatsApp' }, 
+    { key: 'weChat', label: 'WeChat', value: 'weChat' },
+    { key: 'linkedIn', label: 'LinkedIn', value: 'linkedIn' },
+    { key: 'gitHub', label: 'GitHub', value: 'gitHub' }, 
+    { key: 'facebook', label: 'Facebook', value: 'facebook' }, 
+    { key: 'instagram', label: 'Instagram', value: 'instagram' }, 
+    { key: 'snapchat', label: 'Snapchat', value: 'snapchat' }, 
+    { key: 'tikTok', label: 'TikTok', value: 'tikTok' } ];
+
+export const CONTACT_KEYS = {
+    cellPhone: 'Phone',
+    workPhone: 'Work Phone',
+    email: 'Email',
+    workEmail: 'Work Email',
+    organization: 'Company',
+    title: 'Title',
+    birthday: 'Birthday',
+    url: 'Website',
+    whatsApp: 'WhatsApp',
+    weChat: 'WeChat',
+    linkedIn: 'LinkedIn',
+    gitHub: 'GitHub',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    snapchat: 'Snapchat',
+    tiktok: 'TikTok',
+    notes: 'Notes'
+}

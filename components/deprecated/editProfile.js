@@ -2,11 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions } from "react-native";
 import { View, Button, GridList, Colors, Spacings,
          Text, Assets, Incubator } from 'react-native-ui-lib';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const { TextField } = Incubator;
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
+// Only for filtering out title and icon, all the other changes are done in profile 
 var profileData = [];
 function getProfileAttributes(profile) {
   profileData = [];
@@ -22,15 +25,26 @@ function getProfileAttributes(profile) {
 
 export default function EditProfilePage({ route, navigation }) {
   const { itemId, profile } = route.params;
+  console.log("------ Edit profile ------")
+
   getProfileAttributes(profile)
-  var customData = profile
 
   const changeProfileValue = (value, field) =>{
-    customData[field] = value
+    profile[field] = value
   }
 
   const updateProfile = (itemId, profile) => {
     console.log("Update Profile")
+    async function saveProfile() {
+      try {
+        await AsyncStorage.setItem(itemId, JSON.stringify(profile))
+        console.log('Done');
+      } catch (e) {
+        console.log(e);
+        // saving error
+      }
+    }
+    saveProfile();
     navigation.navigate('Profile', {
       itemId: itemId,
       profile: profile
@@ -40,7 +54,7 @@ export default function EditProfilePage({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.profileName}>
+      <View style={{flexDirection: 'row'}}>
         <TextField 
           onChangeText={event => changeProfileValue(event, "icon")}
           defaultValue={profile.icon}
@@ -68,7 +82,7 @@ export default function EditProfilePage({ route, navigation }) {
         onChangeText={event => changeProfileValue(event, "Name")}
         defaultValue={profile.Name}
       /> */}
-      <GridList styles={styles.grid}
+      <GridList styles={{backgroundColor: 'gray'}}
         data={profileData}
         containerWidth={width}
         numColumns={1}
@@ -95,7 +109,7 @@ export default function EditProfilePage({ route, navigation }) {
         iconSource={Assets.icons.checkSmall}
         label={'Done'}
         onPress={event => updateProfile(itemId, profile)} 
-        style={styles.button}
+        style={{marginBottom: 35}}
       />
       <StatusBar style="auto" />
     </View>
@@ -103,9 +117,6 @@ export default function EditProfilePage({ route, navigation }) {
 };
 
 const styles = StyleSheet.create({
-  profileName: {
-    flexDirection: 'row',
-  },
   textinput: {
     fontSize: 35,
     marginVertical: 25,
@@ -129,9 +140,6 @@ const styles = StyleSheet.create({
     marginLeft: '2.5%', 
     width: '90%',
   },
-  grid:{
-    backgroundColor: 'gray',
-  },
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -141,13 +149,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
-  },
-  scrollView: {
-    backgroundColor: 'pink',
-    marginVertical: 20,
-    height: 60
-  },
-  button: {
-    marginBottom: 35
   }
 }); 

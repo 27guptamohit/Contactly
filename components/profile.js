@@ -11,7 +11,13 @@ import {
   PanningProvider,
 } from "react-native-ui-lib";
 import { useState } from "react";
+import { CONTACT_KEYS } from "../utils/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShareContact from "./shareDialog";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -20,9 +26,9 @@ var profileData = [];
 function getProfileAttributes(profile) {
   profileData = [];
   for (let key in profile) {
-    if (key != "title" && (key != "icon") & (key != "Name")) {
+    if (key != "profileName" && key != "icon" && key != "firstName" && key != "lastName" && key != "photo") {
       profileData.push({
-        caption: key,
+        key: key,
         value: profile[key],
       });
     }
@@ -30,25 +36,52 @@ function getProfileAttributes(profile) {
 }
 
 export default function ProfilePage({ route, navigation }) {
-  const { itemId, profile } = route.params;
+  const { itemId, profile, forceUpdate, master, autofill } = route.params;
   const [visible, setVisible] = useState(false);
+
+  const [currProfile, setCurrProfile] = useState(profile);
+
   const toggleDialog = () => {
     setVisible(!visible);
   };
   const toggleOff = () => {
     setVisible(false);
+  };
+
+  const changeProfile = (newProfile) => {
+    setCurrProfile(newProfile);
+  };
+  
+  getProfileAttributes(currProfile);
+  
+  const navigate = () => {
+    navigation.goBack();
   }
-  getProfileAttributes(profile);
+
+  async function deleteProfile() {
+    try {
+      await AsyncStorage.removeItem(itemId);
+    } catch(e) {
+      // remove error
+    }
+    forceUpdate();
+    navigate();
+  }  
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 40, marginVertical: 25 }}>
-        {profile.icon + " " + profile.title}
+        {currProfile.icon ? currProfile.icon + " " + currProfile.profileName : currProfile.profileName}
       </Text>
-      {/* <Avatar
-        source={require("../assets/placeholder.png")}
-        size={120}
-      />
-      <Text style={{ fontSize: 18, marginVertical: 5 }}>{profile.Name}</Text> */}
+      <Avatar 
+          source={currProfile.photo ? { uri: currProfile.photo } : require('../assets/placeholder.png')} 
+          size={120} 
+          style={{ marginBottom: 10 }} />
+        { currProfile.firstName ? 
+          (currProfile.lastName ? 
+            (<Text style={{ fontSize: 22, marginTop: 18 }}>{currProfile.firstName + ' ' + currProfile.lastName}</Text>) 
+            : <Text style={{ fontSize: 20, marginVertical: 10 }}>{currProfile.firstName}</Text>) 
+            : null }
       <GridList
         data={profileData}
         containerWidth={width}
@@ -60,7 +93,7 @@ export default function ProfilePage({ route, navigation }) {
             <Text
               style={{ fontSize: 15, marginBottom: 2, color: Colors.grey20 }}
             >
-              {item.caption}
+              {CONTACT_KEYS[item.key]}
             </Text>
             <Text style={{ fontSize: 18, marginBottom: 6 }}>{item.value}</Text>
           </View>
@@ -84,8 +117,12 @@ export default function ProfilePage({ route, navigation }) {
             iconSource={require("../assets/edit.png")}
             iconStyle={styles.icon}
             onPress={() => navigation.navigate('EditProfile', {
-              itemId: itemId,
-              profile: profile
+              forceUpdate: forceUpdate, 
+              master: master, 
+              autofill: autofill, 
+              initialRef: profileData,
+              currentProfile: profile,
+              changeProfile: changeProfile
             })}
           />
           <Button
@@ -97,16 +134,26 @@ export default function ProfilePage({ route, navigation }) {
             iconStyle={styles.icon}
             onPress={toggleDialog}
           />
+          <Button
+            size={"large"}
+            style={{ padding: 15 }}
+            borderRadius={10}
+            backgroundColor={Colors.grey50}
+            iconSource={require("../assets/trash.png")}
+            iconStyle={styles.icon}
+            onPress={deleteProfile}
+          />
         </View>
       </View>
-      <StatusBar style="auto" />
-      <ShareContact
+      <ShareContact style={{ width: width }}
         {...{
           visible: visible,
           panDirection: PanningProvider.Directions.DOWN,
           toggleOff: toggleOff,
+          profile: profile,
         }}
       ></ShareContact>
+      <StatusBar style="auto" />
     </View>
   );
 }
