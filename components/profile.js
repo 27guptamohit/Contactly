@@ -14,6 +14,9 @@ import { useState } from "react";
 import { CONTACT_KEYS } from "../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShareContact from "./shareDialog";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -142,8 +145,7 @@ export default function ProfilePage({ route, navigation }) {
           />
         </View>
       </View>
-      <StatusBar style="auto" />
-      <ShareContact
+      <ShareContact style={{ width: width }}
         {...{
           visible: visible,
           panDirection: PanningProvider.Directions.DOWN,
@@ -151,6 +153,7 @@ export default function ProfilePage({ route, navigation }) {
           profile: profile,
         }}
       ></ShareContact>
+      <StatusBar style="auto" />
     </View>
   );
 }

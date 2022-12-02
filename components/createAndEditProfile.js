@@ -5,6 +5,9 @@ import { Avatar, View, Button, Icon, Colors, Assets, Incubator, Picker } from "r
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CONTACT_KEYS } from "../utils/constants";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const { TextField } = Incubator;
 const width = Dimensions.get('window').width;
@@ -131,15 +134,16 @@ export default function CreateAndEditProfile({ route, navigation }) {
           </Picker>
           <View style={styles.row}>
             <TextField
-              style={[styles.fields, { marginVertical: 5, marginRight: 7, width: width * 0.82 }]}
+              containerStyle={[styles.textContainer, { width: width * 0.82 }]}
+              style={{ fontSize: 17 }}
               onChangeText={(text) => inputValueHandler(i, text)}
               value={refInputs.current[i]['value']}
               autoCapitalize={'none'}
               autoCorrect={false}
             />
             <Button 
-              backgroundColor={Colors.$backgroundPrimaryLight}
-              style={{ height: 30, width: 30 }}
+              backgroundColor={Colors.transparent}
+              style={{ height: 30, width: 30, marginTop: 7 }}
               color={Colors.grey10}
               iconSource={require('../assets/close.png')}
               iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
@@ -152,16 +156,18 @@ export default function CreateAndEditProfile({ route, navigation }) {
 
   return (
     <View style={styles.container_main}>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <TextField 
           onChangeText={(value) => setIcon(value)}
           defaultValue={icon}
           textAlign={"center"}
           placeholder={'❔'}
-          style={[styles.textinput, { marginRight: 5 }]}>
+          containerStyle={[styles.textContainer, { marginRight: 5 }]}
+          style={{ fontSize: 25 }}>
         </TextField>
         <TextField
-          style={[styles.textinput, { minWidth: width-175 }]}
+          containerStyle={[styles.textContainer, { minWidth: width-175 }]}
+          style={{ fontSize: 25 }}
           onChangeText={(value) => setTitle(value)}
           defaultValue={title}
           placeholder={'Profile Name'}
@@ -178,16 +184,18 @@ export default function CreateAndEditProfile({ route, navigation }) {
           backgroundColor={Colors.transparent}
           color={Colors.blue30}
           iconSource={Assets.icons.plusSmall} />
-        <View style={{ flexDirection: 'row', justifyContent: 'center', width: width }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', width: width, marginBottom: 20 }}>
           <TextField
-            style={[styles.fields, { marginRight: 5, width: 0.3 * width }]}
+            containerStyle={[styles.textContainer, { marginRight: 5, width: 0.3 * width }]}
+            style={{ fontSize: 17 }}
             onChangeText={(text) => setFirstName(text)}
             value={firstName}
             placeholder={'First'}
             autoCapitalize={'none'}
             />
           <TextField
-            style={[styles.fields, { marginBottom: 20, width: 0.45 * width }]}
+            containerStyle={[styles.textContainer, { width: 0.45 * width  }]}
+            style={{ fontSize: 17 }}
             onChangeText={(text) => setLastName(text)}
             value={lastName}
             placeholder={'Last'}
@@ -259,6 +267,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.$outlineDisabledHeavy,
     paddingBottom: 4,
   },
+  textContainer: {
+    padding: 7,
+    backgroundColor: Colors.grey70,
+    borderRadius: 5,
+    marginVertical: 5, 
+    marginRight: 7,
+  },
   pickerContainer: { 
     padding: 2,
     height: 25, 
@@ -267,12 +282,4 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     borderColor: Colors.$textDisabled
   },
-  textinput: {
-    fontSize: 25,
-    marginVertical: 25,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderColor: Colors.$outlineDisabledHeavy,
-    paddingBottom: 4,
-  }
 });

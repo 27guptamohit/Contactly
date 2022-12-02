@@ -1,34 +1,11 @@
-import { Dialog, Button, Colors, Incubator } from "react-native-ui-lib";
+import { View, Dialog, Button, Colors, Incubator } from "react-native-ui-lib";
 import QRCode from "react-native-qrcode-svg";
-import Svg, { Path } from "react-native-svg";
-import { Share, StyleSheet, TouchableOpacity } from "react-native";
-import View from "react-native-ui-lib/view";
-import React, { startTransition, useEffect, useState } from "react";
-import vCard from "./vcard/vcard";
+import { StyleSheet } from "react-native";
+import React, { useState } from "react";
 import { getContactCard } from "./vcard/converter";
+import { LogBox } from 'react-native';
 
-const onShare = async () => {
-  try {
-    const result = await Share.share({
-      message: getContactCard(),
-    });
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // shared with activity type of result.activityType
-      } else {
-        // shared
-      }
-    } else if (result.action === Share.dismissedAction) {
-      // dismissed
-    }
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
-const addNote = (message, profile) => {
-  profile.notes = message;
-};
+LogBox.ignoreAllLogs();
 
 export default function ShareContact(props) {
   const [note, setNote] = useState("");
@@ -40,8 +17,8 @@ export default function ShareContact(props) {
         visible={props.visible}
         panDirection={props.panDirection}
         onDismiss={() => {
-              setisCompleted(false);
-              return props.toggleOff;
+          setisCompleted(false);
+          props.toggleOff();
         }}
         height={"50%"}
         width={"75%"}
@@ -52,12 +29,16 @@ export default function ShareContact(props) {
               placeholder={"Add an optional note"}
               onChangeText={(text) => setNote(text)}
               showCharCounter
-              width={100}
+              width={200}
               multiline={true}
+              containerStyle={{
+                padding: 15,
+                backgroundColor: Colors.grey70,
+                borderRadius: 5
+              }}
             />
             <Button
               size={'large'}
-
               style={styles.button}
               label={"Continue"}
               onPress={(pressed) => {if(pressed){ 
@@ -96,11 +77,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginLeft: 5,
+    borderRadius: 15
   },
   container: {
     flex: 1,
     height: 500,
-    width: 300,
+    width: 290,
     borderRadius: 15,
   },
   icon: {
@@ -111,5 +94,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 100,
+    borderRadius: 10,
+    backgroundColor: Colors.grey10
   },
 });

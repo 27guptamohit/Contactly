@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,6 +10,9 @@ import CreateAndEditProfile from './components/createAndEditProfile';
 import CreateMasterButton from "./components/masterProfile/createButton";
 import EditMasterProfile from "./components/masterProfile/editMaster";
 import MasterProfileHome from "./components/masterProfile/master";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -55,8 +58,16 @@ export default function App() {
     checkMasterProfile();
   }, []);
 
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background:'white'
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       {hasMaster ? (
         <Stack.Navigator>
           <Stack.Screen 
@@ -92,7 +103,11 @@ export default function App() {
           <Stack.Screen 
             name="EditMaster" 
             component={EditMasterProfile} 
-            initialParams={{ currentMaster: null, initialRef: [{key: '', value: ''}], setHasMaster: createdMaster }}
+            initialParams={{ 
+              currentMaster: null, 
+              initialRef: [{key: '', value: ''}], 
+              setHasMaster: createdMaster 
+            }}
             options={{title: 'Edit'}} />
         </Stack.Navigator>
       )}

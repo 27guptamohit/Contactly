@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Dimensions, RefreshControl } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Card, Button, Text, GridList, Colors, LoaderScreen, Spacings, Assets } from 'react-native-ui-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ArrayEquals, ArrayDeepEquals, DeepEquals } from '../utils/utilFunctions';
 import { CONTACT_KEYS } from '../utils/constants';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -21,6 +25,25 @@ export default function HomePage({ navigation }) {
   function useForceUpdate() {
     setValue(value => value + 1);
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      const getMasterProfile = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('@master');
+          const masterObj = jsonValue != null ? JSON.parse(jsonValue) : null;
+          var keys = Object.keys(masterObj);
+          keys.splice(0, 3);
+          const transformed = keys.map(element => ({ key: element, label: CONTACT_KEYS[element], value: element }));
+          setMaster(masterObj);
+          setAutofill(transformed);
+        } catch (error) {
+          // Any needed logic for failure
+        }
+      };
+      getMasterProfile();
+    }, [])
+  );
  
   useEffect(() => {
     setLoading(true);

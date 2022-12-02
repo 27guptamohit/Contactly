@@ -14,7 +14,9 @@ import {
 } from "react-native-ui-lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CONTACT_KEYS } from "../../utils/constants";
-import { ArrayDeepEquals, DeepEquals } from "../../utils/utilFunctions";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;

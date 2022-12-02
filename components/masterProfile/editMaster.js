@@ -5,6 +5,9 @@ import { Avatar, View, Button, Colors, Icon, Assets, Incubator, Picker } from "r
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIELDS, CONTACT_KEYS } from '../../utils/constants';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const { TextField } = Incubator;
 const width = Dimensions.get('window').width;
@@ -127,15 +130,16 @@ export default function EditMasterProfile({ route, navigation }) {
           </Picker>
           <View style={styles.row}>
             <TextField
-              style={[styles.fields, { marginVertical: 5, marginRight: 7, width: width * 0.82 }]}
+              containerStyle={[styles.textContainer, { width: width * 0.82 }]}
+              style={{ fontSize: 17 }}
               onChangeText={(text) => inputValueHandler(i, text)}
               value={refInputs.current[i]['value']}
               autoCapitalize={'none'}
               autoCorrect={false}
             />
             <Button 
-              backgroundColor={Colors.$backgroundPrimaryLight}
-              style={{ height: 30, width: 30 }}
+              backgroundColor={Colors.transparent}
+              style={{ marginTop: 5, height: 30, width: 30 }}
               color={Colors.grey10}
               iconSource={require('../../assets/close.png')}
               iconStyle={{ resizeMode: 'contain', height: 25, width: 25 }}
@@ -158,23 +162,25 @@ export default function EditMasterProfile({ route, navigation }) {
           backgroundColor={Colors.transparent}
           color={Colors.blue30}
           iconSource={Assets.icons.plusSmall} />
-        <View style={{ flexDirection: 'row', justifyContent: 'center', width: width }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', width: width, marginBottom: 10 }}>
           <TextField
-            style={[styles.fields, { marginRight: 5, width: 0.3 * width }]}
+            containerStyle={[styles.textContainer, { width: 0.3 * width }]}
+            style={{ fontSize: 17 }}
             onChangeText={(text) => setFirstName(text)}
             value={firstName}
             placeholder={'First'}
             autoCapitalize={'none'}
             />
           <TextField
-            style={[styles.fields, { marginBottom: 20, width: 0.45 * width }]}
+            containerStyle={[styles.textContainer, { width: 0.45 * width }]}
+            style={{ fontSize: 17 }}
             onChangeText={(text) => setLastName(text)}
             value={lastName}
             placeholder={'Last'}
             autoCapitalize={'none'}
             />
         </View>
-        <View style={{ maxHeight: 0.41 * height }} >
+        <View style={{ maxHeight: 0.34 * height }} >
           <ScrollView>{inputs}</ScrollView>
         </View>
       </View>
@@ -210,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 25,
-    width: width
+    width: width,
   },
   container_1: {
     alignItems: "center",
@@ -233,11 +239,12 @@ const styles = StyleSheet.create({
     marginBottom: 5, 
     justifyContent: 'flex-start' 
   },
-  fields: {
-    fontSize: 20, 
-    borderBottomWidth: 1,
-    borderColor: Colors.$outlineDisabledHeavy,
-    paddingBottom: 4,
+  textContainer: {
+    padding: 5,
+    backgroundColor: Colors.grey70,
+    borderRadius: 5,
+    marginVertical: 5, 
+    marginRight: 7,
   },
   pickerContainer: { 
     padding: 2,
