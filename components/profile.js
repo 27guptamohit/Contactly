@@ -148,6 +148,7 @@ export default function ProfilePage({ route, navigation }) {
           visible: visible,
           panDirection: PanningProvider.Directions.DOWN,
           toggleOff: toggleOff,
+          profile: profile,
         }}
       ></ShareContact>
     </View>
