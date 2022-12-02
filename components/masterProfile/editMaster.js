@@ -24,7 +24,7 @@ export default function EditMasterProfile({ route, navigation }) {
   const { currentMaster, initialRef, setHasMaster } = route.params
   const [image, setImage] = useState(currentMaster ? currentMaster['photo'] : null);
   const [firstName, setFirstName] = useState(currentMaster ? currentMaster['firstName'] : '');
-  const [name, setName] = useState(currentMaster ? currentMaster['lastName'] : '');
+  const [lastName, setLastName] = useState(currentMaster ? currentMaster['lastName'] : '');
 
   const [titleValue, setTitleValue] = useState('');
   const [valValue, setValValue] = useState('');
@@ -79,7 +79,11 @@ export default function EditMasterProfile({ route, navigation }) {
   }
 
   async function saveMasterProfile() {
-    const masterProfile = { 'photo': image, 'firstName': firstName, 'lastName': name };
+    const masterProfile = { 
+      'photo': image, 
+      'firstName': firstName, 
+      'lastName': lastName
+    };
     if (numInputs > 0) {
       for (let i = 0; i < numInputs; i++) {
         if (refInputs.current[i]['value'] !== "") {
@@ -110,14 +114,7 @@ export default function EditMasterProfile({ route, navigation }) {
             placeholder={CONTACT_KEYS[refInputs.current[i]['key']]}
             placeholderTextColor={Colors.$textDefault}
             style={{ fontSize: 15, }}
-            containerStyle={[{ 
-              padding: 2,
-              height: 25, 
-              width: width * 0.3,
-              borderWidth: 1,
-              borderRadius: 7,
-              borderColor: Colors.$textDisabled
-            }]}
+            containerStyle={styles.pickerContainer}
             trailingAccessory={dropdownIcon}
             migrateTextField
             useSafeArea
@@ -128,7 +125,7 @@ export default function EditMasterProfile({ route, navigation }) {
               />
             ))}
           </Picker>
-          <View style={{ flex: 1, flexDirection: 'row', width: width, marginBottom: 5, justifyContent: 'flex-start' }}>
+          <View style={styles.row}>
             <TextField
               style={[styles.fields, { marginVertical: 5, marginRight: 7, width: width * 0.82 }]}
               onChangeText={(text) => inputValueHandler(i, text)}
@@ -171,8 +168,8 @@ export default function EditMasterProfile({ route, navigation }) {
             />
           <TextField
             style={[styles.fields, { marginBottom: 20, width: 0.45 * width }]}
-            onChangeText={(text) => setName(text)}
-            value={name}
+            onChangeText={(text) => setLastName(text)}
+            value={lastName}
             placeholder={'Last'}
             autoCapitalize={'none'}
             />
@@ -229,10 +226,25 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: '25%',
   },
+  row: { 
+    flex: 1, 
+    flexDirection: 'row', 
+    width: width, 
+    marginBottom: 5, 
+    justifyContent: 'flex-start' 
+  },
   fields: {
     fontSize: 20, 
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDisabledHeavy,
     paddingBottom: 4,
+  },
+  pickerContainer: { 
+    padding: 2,
+    height: 25, 
+    width: width * 0.3,
+    borderWidth: 1,
+    borderRadius: 7,
+    borderColor: Colors.$textDisabled
   }
 });

@@ -22,7 +22,7 @@ const height = Dimensions.get("window").height;
 export default function MasterProfileHome({ navigation }) {
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState('');
-  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [master, setMaster] = useState('');
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ export default function MasterProfileHome({ navigation }) {
             } else if (key == 'firstName') {
               setFirstName(profile[key]);
             } else if (key == 'lastName') {
-              setName(profile[key]);
+              setLastName(profile[key]);
             } else {
               temp.push({
                 key: key,
@@ -74,7 +74,7 @@ export default function MasterProfileHome({ navigation }) {
           size={120} 
           style={{ marginBottom: 10 }} />
         { firstName ? 
-          (name ? (<Text style={{ fontSize: 20, marginVertical: 10 }}>{firstName + ' ' + name}</Text>) 
+          (lastName ? (<Text style={{ fontSize: 20, marginVertical: 10 }}>{firstName + ' ' + lastName}</Text>) 
             : <Text style={{ fontSize: 20, marginVertical: 10 }}>{firstName}</Text>) 
             : null }
         <GridList

@@ -33,16 +33,23 @@ function getProfileAttributes(profile) {
 }
 
 export default function ProfilePage({ route, navigation }) {
-  const { itemId, profile, forceUpdate } = route.params;
+  const { itemId, profile, forceUpdate, master, autofill } = route.params;
   const [visible, setVisible] = useState(false);
+
+  const [currProfile, setCurrProfile] = useState(profile);
 
   const toggleDialog = () => {
     setVisible(!visible);
   };
   const toggleOff = () => {
     setVisible(false);
-  }
-  getProfileAttributes(profile);
+  };
+
+  const changeProfile = (newProfile) => {
+    setCurrProfile(newProfile);
+  };
+  
+  getProfileAttributes(currProfile);
   
   const navigate = () => {
     navigation.goBack();
@@ -61,15 +68,16 @@ export default function ProfilePage({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 40, marginVertical: 25 }}>
-        {profile.icon + " " + profile.profileName}
+        {currProfile.icon ? currProfile.icon + " " + currProfile.profileName : currProfile.profileName}
       </Text>
       <Avatar 
-          source={profile.photo ? { uri: profile.photo } : require('../assets/placeholder.png')} 
+          source={currProfile.photo ? { uri: currProfile.photo } : require('../assets/placeholder.png')} 
           size={120} 
           style={{ marginBottom: 10 }} />
-        { profile.firstName ? 
-          (profile.lastName ? (<Text style={{ fontSize: 22, marginTop: 18 }}>{profile.firstName + ' ' + profile.lastName}</Text>) 
-            : <Text style={{ fontSize: 20, marginVertical: 10 }}>{profile.firstName}</Text>) 
+        { currProfile.firstName ? 
+          (currProfile.lastName ? 
+            (<Text style={{ fontSize: 22, marginTop: 18 }}>{currProfile.firstName + ' ' + currProfile.lastName}</Text>) 
+            : <Text style={{ fontSize: 20, marginVertical: 10 }}>{currProfile.firstName}</Text>) 
             : null }
       <GridList
         data={profileData}
@@ -106,8 +114,12 @@ export default function ProfilePage({ route, navigation }) {
             iconSource={require("../assets/edit.png")}
             iconStyle={styles.icon}
             onPress={() => navigation.navigate('EditProfile', {
-              itemId: itemId,
-              profile: profile
+              forceUpdate: forceUpdate, 
+              master: master, 
+              autofill: autofill, 
+              initialRef: profileData,
+              currentProfile: profile,
+              changeProfile: changeProfile
             })}
           />
           <Button

@@ -6,11 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HomePage from "./components/home";
 import ProfilePage from './components/profile';
-import EditProfilePage  from "./components/editProfile"
-import CreateProfile from './components/createProfile';
-import CreateMasterButton from "./components/2_Create_Master_Profile/1_create_master_profile_button";
-import EditMasterProfile from "./components/2_Create_Master_Profile/2_edit_master_profile";
-import MasterProfileHome from "./components/2_Create_Master_Profile/3_show_master_profile";
+import CreateAndEditProfile from './components/createAndEditProfile';
+import CreateMasterButton from "./components/masterProfile/createButton";
+import EditMasterProfile from "./components/masterProfile/editMaster";
+import MasterProfileHome from "./components/masterProfile/master";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -42,15 +41,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    async function removeValue() {
-      try {
-        await AsyncStorage.removeItem('@master')
-      } catch(e) {
-        // remove error
-      }
-    
-      console.log('Done.')
-    }
     async function checkMasterProfile() {
       try {
         const value = await AsyncStorage.getItem('@master');
@@ -62,13 +52,6 @@ export default function App() {
         // Any needed logic for failure
       }
     }
-    async function clearAllData() {
-      AsyncStorage.getAllKeys()
-          .then(keys => AsyncStorage.multiRemove(keys))
-          .then(() => alert('success'));
-    } 
-    // clearAllData();
-    // removeValue();
     checkMasterProfile();
   }, []);
 
@@ -93,10 +76,12 @@ export default function App() {
             component={ProfilePage} />
           <Stack.Screen 
             name="EditProfile" 
-            component={EditProfilePage} />
+            component={CreateAndEditProfile}
+            options={{title: 'Edit Profile'}} />
           <Stack.Screen
             name="Create"
-            component={CreateProfile}/>
+            component={CreateAndEditProfile}
+            options={{title: 'Create Profile'}}/>
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>

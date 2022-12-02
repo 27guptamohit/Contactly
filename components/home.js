@@ -33,7 +33,6 @@ export default function HomePage({ navigation }) {
           if (!ArrayEquals(keys, profileKeys)) {
             setProfileKeys(keys);
           }
-          console.log('profile keys', profileKeys);
         }
       } catch (error) {
         // Any needed logic for failure
@@ -59,9 +58,7 @@ export default function HomePage({ navigation }) {
         }
       }
       let cards = [];
-      console.log('profiles', profiles);
       for (let key in profiles) {
-        console.log('key', key);
         cards.push({
           key: key,
           profileName: profiles[key]?.profileName,
@@ -88,7 +85,6 @@ export default function HomePage({ navigation }) {
     getProfileKeys();
     getMaster();
     setLoading(false);
-    console.log("autofill", autofill);
   }, [profileKeys, cardData, profiles, value, master, autofill]);
 
   if (isLoading) {
@@ -122,7 +118,9 @@ export default function HomePage({ navigation }) {
                   onPress={() => navigation.navigate('Profile', {
                     itemId: item.key,
                     profile: profiles[item.key],
-                    forceUpdate: useForceUpdate
+                    forceUpdate: useForceUpdate,
+                    master: master,
+                    autofill: autofill
                   })}
                 >
                   <Text style={{fontSize: 18}}>{item.profileName}</Text>
@@ -141,7 +139,8 @@ export default function HomePage({ navigation }) {
               forceUpdate: useForceUpdate,
               master: master,
               autofill: autofill,
-              profile: null
+              initialRef: [{key: '', value: ''}],
+              currentProfile: null
             })}
             style={styles.button}
             label={'Create'} />

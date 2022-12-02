@@ -20,19 +20,18 @@ const dropdownIcon = <Icon
    }} 
   tintColor={Colors.$iconDefault}/>;
 
-export default function CreateProfile({ route, navigation }) {
-  const { forceUpdate, master, autofill, profile } = route.params;
-  console.log(master);
-  const [image, setImage] = useState(master['photo']);
-  const [firstName, setFirstName] = useState(master['firstName']);
-  const [name, setName] = useState(master['lastName']);
-  const [icon, setIcon] = useState('');
-  const [title, setTitle] = useState('');
+export default function CreateAndEditProfile({ route, navigation }) {
+  const { forceUpdate, master, autofill, initialRef, currentProfile, changeProfile } = route.params;
+  const [image, setImage] = useState(currentProfile ? currentProfile['photo'] : master['photo']);
+  const [firstName, setFirstName] = useState(currentProfile ? currentProfile['firstName'] : master['firstName']);
+  const [lastName, setLastName] = useState(currentProfile ? currentProfile['lastName'] : master['lastName']);
+  const [icon, setIcon] = useState(currentProfile ? currentProfile['icon'] : '');
+  const [title, setTitle] = useState(currentProfile ? currentProfile['profileName'] : '');
   
   const [titleValue, setTitleValue] = useState('');
   const [valValue, setValValue] = useState('');
-  const [numInputs, setNumInputs] = useState(1);
-  const refInputs = useRef([{key: titleValue, value: valValue}]);
+  const [numInputs, setNumInputs] = useState(initialRef.length);
+  const refInputs = useRef(initialRef);
 
   useEffect(() => {
     async function fetchData() {
@@ -84,7 +83,13 @@ export default function CreateProfile({ route, navigation }) {
   }
 
   async function saveProfile() {
-    const currProfile = {'profileName': title, 'icon': icon, 'photo': image, 'firstName': firstName, 'lastName': name};
+    const currProfile = { 
+      'profileName': title, 
+      'icon': icon, 
+      'photo': image, 
+      'firstName': firstName, 
+      'lastName': lastName
+    };
     for (let i = 0; i < numInputs; i++) {
       currProfile[refInputs.current[i]['key']] = refInputs.current[i]['value'];
     }
@@ -96,6 +101,9 @@ export default function CreateProfile({ route, navigation }) {
       await AsyncStorage.setItem(key, JSON.stringify(currProfile))
     } catch (e) {
       // saving error
+    }
+    if (changeProfile) {
+      changeProfile(currProfile);
     }
     forceUpdate();
     navigate();
@@ -112,14 +120,7 @@ export default function CreateProfile({ route, navigation }) {
             placeholder={CONTACT_KEYS[refInputs.current[i]['key']]}
             placeholderTextColor={Colors.$textDefault}
             style={{ fontSize: 15, }}
-            containerStyle={[{ 
-              padding: 2,
-              height: 25, 
-              width: width * 0.3,
-              borderWidth: 1,
-              borderRadius: 7,
-              borderColor: Colors.$textDisabled
-            }]}
+            containerStyle={styles.pickerContainer}
             trailingAccessory={dropdownIcon}
             migrateTextField
             useSafeArea
@@ -128,7 +129,7 @@ export default function CreateProfile({ route, navigation }) {
               <Picker.Item key={option.key} value={option.value} label={option.label}/>
             ))}
           </Picker>
-          <View style={{ flex: 1, flexDirection: 'row', width: width, marginBottom: 5, justifyContent: 'flex-start' }}>
+          <View style={styles.row}>
             <TextField
               style={[styles.fields, { marginVertical: 5, marginRight: 7, width: width * 0.82 }]}
               onChangeText={(text) => inputValueHandler(i, text)}
@@ -187,8 +188,8 @@ export default function CreateProfile({ route, navigation }) {
             />
           <TextField
             style={[styles.fields, { marginBottom: 20, width: 0.45 * width }]}
-            onChangeText={(text) => setName(text)}
-            value={name}
+            onChangeText={(text) => setLastName(text)}
+            value={lastName}
             placeholder={'Last'}
             autoCapitalize={'none'}
             />
@@ -245,11 +246,26 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: '25%',
   },
+  row: { 
+    flex: 1, 
+    flexDirection: 'row', 
+    width: width, 
+    marginBottom: 5, 
+    justifyContent: 'flex-start' 
+  },
   fields: {
     fontSize: 20, 
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDisabledHeavy,
     paddingBottom: 4,
+  },
+  pickerContainer: { 
+    padding: 2,
+    height: 25, 
+    width: width * 0.3,
+    borderWidth: 1,
+    borderRadius: 7,
+    borderColor: Colors.$textDisabled
   },
   textinput: {
     fontSize: 25,
