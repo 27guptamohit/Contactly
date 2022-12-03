@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
+import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet, Dimensions } from "react-native";
 import {
   View,
@@ -15,6 +16,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CONTACT_KEYS } from "../../utils/constants";
 import { LogBox } from 'react-native';
+import { ArrayDeepEquals, DeepEquals } from "../../utils/utilFunctions";
 
 LogBox.ignoreAllLogs();
 
@@ -29,6 +31,28 @@ export default function MasterProfileHome({ navigation }) {
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
+  useFocusEffect(
+    useCallback(() => {
+      const getMasterProfile = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('@master');
+          const masterObj = jsonValue != null ? JSON.parse(jsonValue) : null;
+          var keys = Object.keys(masterObj);
+          setImage(masterObj?.photo);
+          setFirstName(masterObj?.firstName);
+          setLastName(masterObj?.lastName);
+          keys.splice(0, 3);
+          const transformed = keys.map(key => ({ key: key, value: masterObj[key] }));
+          setMaster(masterObj);
+          setProfileData(transformed);
+        } catch (error) {
+          // Any needed logic for failure
+        }
+      };
+      getMasterProfile();
+    }, [])
+  );
+
   useEffect(() => {
     setLoading(true);
     async function getMasterProfile() {
@@ -39,7 +63,9 @@ export default function MasterProfileHome({ navigation }) {
           temp = [];
           for (let key in profile) {
             if (key == 'photo') {
-              setImage(profile[key]);
+              if (image !== profile[key]) {
+                setImage(profile[key]);
+              }
             } else if (key == 'firstName') {
               setFirstName(profile[key]);
             } else if (key == 'lastName') {
@@ -51,8 +77,12 @@ export default function MasterProfileHome({ navigation }) {
               });
             }
           }
-          setProfileData(temp);
-          setMaster(profile);
+          if (!ArrayDeepEquals(profileData, temp)) {
+            setProfileData(temp);
+          }
+          if (!DeepEquals(master, profile)) {
+            setMaster(profile);
+          }
         }
       } catch (error) {
         // Any needed logic for failure
@@ -60,7 +90,7 @@ export default function MasterProfileHome({ navigation }) {
     }
     getMasterProfile();
     setLoading(false);
-  }, []);
+  }, [image, master]);
 
   if (isLoading) {
     return(

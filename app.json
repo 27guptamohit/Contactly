@@ -25,6 +25,7 @@
         "foregroundImage": "./assets/icon2_foreground.png",
         "backgroundColor": "#FFFFFF"
       },
+      "softwareKeyboardLayoutMode": "pan",
       "package": "com.ashelyeah.Contactly"
     },
     "web": {

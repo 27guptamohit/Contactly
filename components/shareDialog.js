@@ -1,11 +1,14 @@
 import { View, Dialog, Button, Colors, Incubator } from "react-native-ui-lib";
 import QRCode from "react-native-qrcode-svg";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import React, { useState } from "react";
 import { getContactCard } from "./vcard/converter";
 import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs();
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 export default function ShareContact(props) {
   const [note, setNote] = useState("");
@@ -13,59 +16,63 @@ export default function ShareContact(props) {
 
   if (!isCompleted) {
     return (
-      <Dialog
-        visible={props.visible}
-        panDirection={props.panDirection}
-        onDismiss={() => {
-          setisCompleted(false);
-          props.toggleOff();
-        }}
-        height={"50%"}
-        width={"75%"}
-      >
-        <View style={styles.container}>
-          <View flex center style={styles.qrcode}>
-            <Incubator.TextField
-              placeholder={"Add an optional note"}
-              onChangeText={(text) => setNote(text)}
-              showCharCounter
-              width={200}
-              multiline={true}
-              containerStyle={{
-                padding: 15,
-                backgroundColor: Colors.grey70,
-                borderRadius: 5
-              }}
-            />
-            <Button
-              size={'large'}
-              style={styles.button}
-              label={"Continue"}
-              onPress={(pressed) => {if(pressed){ 
-                setisCompleted(true);
-              }}}
-            ></Button>
+      <View>
+        <Dialog
+          visible={props.visible}
+          panDirection={props.panDirection}
+          onDismiss={() => {
+            setisCompleted(false);
+            props.toggleOff();
+          }}
+          height={"50%"}
+          width={"75%"}
+        >
+          <View style={styles.container}>
+            <View flex center style={styles.qrcode}>
+              <Incubator.TextField
+                placeholder={"Add an optional note"}
+                onChangeText={(text) => setNote(text)}
+                showCharCounter
+                width={width * 0.5}
+                multiline={true}
+                containerStyle={{
+                  padding: 15,
+                  backgroundColor: Colors.grey70,
+                  borderRadius: 5
+                }}
+              />
+              <Button
+                size={'large'}
+                style={styles.button}
+                label={"Continue"}
+                onPress={(pressed) => {if(pressed){ 
+                  setisCompleted(true);
+                }}}
+              ></Button>
+            </View>
+            <View flex center></View>
           </View>
-          <View flex center></View>
-        </View>
-      </Dialog>
+        </Dialog>
+      </View>
     );
   } else {
     return (
-      <Dialog
-        visible={props.visible}
-        panDirection={props.panDirection}
-        onDismiss={props.toggleOff}
-        height={"50%"}
-        width={"75%"}
-      >
-        <View style={styles.container}>
-          <View flex center style={styles.qrcode}>
-            <QRCode size={200} value={getContactCard(props.profile, note)}></QRCode>
+      <View>
+        <Dialog
+          visible={props.visible}
+          panDirection={props.panDirection}
+          onDismiss={props.toggleOff}
+          height={"50%"}
+          width={"75%"}
+        >
+          <View style={styles.container}>
+            <View flex center style={styles.qrcode}>
+              <QRCode size={width * 0.5} value={getContactCard(props.profile, note)}></QRCode>
+            </View>
+            <View flex center></View>
           </View>
-          <View flex center></View>
-        </View>
-      </Dialog>
+        </Dialog>
+      </View>
     );
   }
 }
@@ -82,15 +89,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: 500,
-    width: 290,
+    height: height * 0.6,
+    width: width * 0.75,
     borderRadius: 15,
-  },
-  icon: {
-    tintColor: Colors.black,
-    resizeMode: "contain",
-    height: 150,
-    width: 150,
   },
   button: {
     marginTop: 100,

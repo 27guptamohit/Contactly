@@ -54,6 +54,7 @@ export default function EditMasterProfile({ route, navigation }) {
 
     if (!result.cancelled){
       setImage(result.uri)
+      console.log(image);
     }
   }
 
@@ -93,6 +94,7 @@ export default function EditMasterProfile({ route, navigation }) {
           masterProfile[refInputs.current[i]['key']] = refInputs.current[i]['value'];
         }
       }
+      console.log(masterProfile);
       try {
         await AsyncStorage.setItem('@master', JSON.stringify(masterProfile))
       } catch (e) {
